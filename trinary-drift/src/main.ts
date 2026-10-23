@@ -112,8 +112,15 @@ function syncSliderLabels(): void {
   must<HTMLOutputElement>("#noise-value").textContent = Number(noiseInput.value).toFixed(2);
 }
 
-function windowHalf(deadBand: number): number {
-  return Math.max(3.4, deadBand * 2.6);
+function viewHalf(deadBand: number): number {
+  let peak = Math.max(2.8, Math.abs(deadBand) * 2.4);
+  for (const lane of lanes) {
+    for (const value of lane.history) {
+      const magnitude = Math.abs(value);
+      if (magnitude > peak) peak = magnitude;
+    }
+  }
+  return Math.min(peak * 1.12, 80);
 }
 
 const lanes: LaneView[] = LANES.map((spec) => {
@@ -249,7 +256,7 @@ function drawChart(lane: LaneView, yMin: number, yMax: number, deadBand: number)
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
 
-  const padLeft = 38 * dpr;
+  const padLeft = 46 * dpr;
   const padRight = 10 * dpr;
   const padTop = 12 * dpr;
   const padBottom = 12 * dpr;
@@ -273,6 +280,14 @@ function drawChart(lane: LaneView, yMin: number, yMax: number, deadBand: number)
   const bandBottom = yOf(Math.max(-deadBand, yMin));
   ctx.fillStyle = "rgba(228, 199, 138, 0.72)";
   ctx.fillRect(padLeft, bandTop, plotWidth, Math.max(1, bandBottom - bandTop));
+  ctx.strokeStyle = "#8a5a28";
+  ctx.lineWidth = dpr;
+  ctx.beginPath();
+  ctx.moveTo(padLeft, bandTop);
+  ctx.lineTo(padLeft + plotWidth, bandTop);
+  ctx.moveTo(padLeft, bandBottom);
+  ctx.lineTo(padLeft + plotWidth, bandBottom);
+  ctx.stroke();
 
   ctx.save();
   ctx.beginPath();
@@ -323,18 +338,19 @@ function drawChart(lane: LaneView, yMin: number, yMax: number, deadBand: number)
   ctx.lineWidth = dpr;
   ctx.strokeRect(padLeft + 0.5, padTop + 0.5, plotWidth - 1, plotHeight - 1);
 
+  const axisLabel = (value: number) => (Math.abs(value) >= 10 ? value.toFixed(0) : value.toFixed(1));
   ctx.fillStyle = "#5e564c";
   ctx.font = `${11 * dpr}px "JetBrains Mono", "Liberation Mono", ui-monospace, monospace`;
   ctx.textAlign = "right";
   ctx.textBaseline = "middle";
-  ctx.fillText(yMax.toFixed(1), padLeft - 6 * dpr, yOf(yMax));
+  ctx.fillText(axisLabel(yMax), padLeft - 6 * dpr, yOf(yMax));
   ctx.fillText("0", padLeft - 6 * dpr, yOf(0));
-  ctx.fillText(yMin.toFixed(1), padLeft - 6 * dpr, yOf(yMin));
+  ctx.fillText(axisLabel(yMin), padLeft - 6 * dpr, yOf(yMin));
 }
 
 function draw(): void {
   const params = readParams();
-  const half = windowHalf(params.deadBand);
+  const half = viewHalf(params.deadBand);
   tickEl.textContent = String(tick);
   kickEl.textContent = fmt(lastKick);
   for (const lane of lanes) {
