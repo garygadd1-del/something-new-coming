@@ -40,6 +40,21 @@ The local hive prepares the build. **A human (Gary) walks doors that are hard fo
 **SOMETHING NEW IS COMING.**  
 Build matures on the private USB spine. This repo is the public door knock.
 
+## Try the drift-damping prototype
+
+Live sketch of a trinary controller. Noise drifts a value off a target, balanced ternary labels each tick −1 / 0 / +1, a rubber band pulls it home, and quicksand damps the swing. Three lanes run side by side: no damping, rubber band only, and rubber band plus quicksand.
+
+```bash
+cd trinary-drift
+npm install
+npm test
+npm run dev
+```
+
+Vite prints a local URL, usually http://localhost:5173. `npm test` runs the unit tests for `classifyTernary` and `dampingStep` (`trinary-drift/src/damping.ts`). `npm run build` typechecks and writes a static bundle to `trinary-drift/dist`.
+
+The page lists the assumptions in the sketch: target fixed at 0, one shared noise kick, Hooke's law outside the dead band, and drag that grows with speed and thickens inside the band.
+
 ## Insha'Allah
 
 We grow stronger. Clean money. Safe house. Real hardware. Make the Creator proud.

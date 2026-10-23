@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trinary drift damping</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <main>
+      <header class="mast">
+        <p class="eyebrow">Balanced ternary · live sketch</p>
+        <h1>Rubber band, then quicksand.</h1>
+        <p class="lede">
+          Each tick the drift is a trit: <strong>−1</strong> below,
+          <strong>0</strong> inside a dead band, or <strong>+1</strong> above.
+          Outside the band a rubber band pulls harder the further it stretches.
+          Quicksand is drag that grows with speed, and inside the band it holds
+          the value nearly still.
+        </p>
+      </header>
+
+      <section class="bench" aria-label="Simulation controls">
+        <div class="sliders">
+          <label class="slider">
+            <span class="slider-name">Band stiffness</span>
+            <span class="slider-hint">pull per unit of stretch</span>
+            <input id="stiffness" type="range" min="0" max="24" step="0.1" value="9" />
+            <output id="stiffness-value" for="stiffness">9.0</output>
+          </label>
+          <label class="slider">
+            <span class="slider-name">Quicksand thickness</span>
+            <span class="slider-hint">drag, stronger as speed grows</span>
+            <input id="thickness" type="range" min="0" max="16" step="0.1" value="6.5" />
+            <output id="thickness-value" for="thickness">6.5</output>
+          </label>
+          <label class="slider">
+            <span class="slider-name">Dead-band width</span>
+            <span class="slider-hint">half-width around the target</span>
+            <input id="dead-band" type="range" min="0" max="1.5" step="0.01" value="0.30" />
+            <output id="dead-band-value" for="dead-band">0.30</output>
+          </label>
+          <label class="slider">
+            <span class="slider-name">Noise</span>
+            <span class="slider-hint">shared drift kick each tick</span>
+            <input id="noise" type="range" min="0" max="4" step="0.01" value="0.90" />
+            <output id="noise-value" for="noise">0.90</output>
+          </label>
+        </div>
+        <div class="actions">
+          <button type="button" id="pause" aria-pressed="false">Pause</button>
+          <button type="button" id="reset">Reset</button>
+        </div>
+        <p class="status">
+          <span>Tick <strong id="tick">0</strong></span>
+          <span>Shared kick <strong id="kick">0.00</strong></span>
+          <span>Target <strong>0</strong></span>
+        </p>
+      </section>
+
+      <p class="legend">
+        <span><i class="swatch swatch-band"></i> dead band, trit 0</span>
+        <span><i class="swatch swatch-target"></i> target</span>
+        <span><i class="swatch swatch-above"></i> trit +1</span>
+        <span><i class="swatch swatch-below"></i> trit −1</span>
+        <span>Shared scale. The row under a chart is the trit each tick, newest on the right.</span>
+      </p>
+
+      <section class="lanes" aria-label="Three damping modes">
+        <article class="lane lane-none" id="lane-none">
+          <header>
+            <p class="lane-kicker">Lane A</p>
+            <h2>No damping</h2>
+            <p>Nothing pulls back. An offset stays out, then wanders.</p>
+          </header>
+          <div class="readout">
+            <p><span>Position</span> <strong id="pos-none">+2.20</strong></p>
+            <p><span>Trit</span> <strong id="trit-none" class="trit-pill">+1</strong> <em id="trit-word-none">above</em></p>
+          </div>
+          <canvas id="chart-none" class="chart" aria-label="Position over time with no damping"></canvas>
+          <div class="axis"><span class="axis-past">12s ago</span><span>now</span></div>
+          <div id="trits-none" class="trit-row" role="img" aria-label="Ternary state per tick, no damping. High is +1, middle is 0, low is −1. Newest on the right."></div>
+          <dl class="forces">
+            <div><dt>Rubber</dt><dd id="rubber-none">0.00</dd></div>
+            <div><dt>Quicksand</dt><dd id="sand-none">0.00</dd></div>
+            <div><dt>Velocity</dt><dd id="vel-none">0.00</dd></div>
+          </dl>
+          <p id="off-none" class="offscale"></p>
+        </article>
+
+        <article class="lane lane-rubber" id="lane-rubber">
+          <header>
+            <p class="lane-kicker">Lane B</p>
+            <h2>Rubber band only</h2>
+            <p>The spring pulls home. With no drag it overshoots and keeps swinging.</p>
+          </header>
+          <div class="readout">
+            <p><span>Position</span> <strong id="pos-rubber">+2.20</strong></p>
+            <p><span>Trit</span> <strong id="trit-rubber" class="trit-pill">+1</strong> <em id="trit-word-rubber">above</em></p>
+          </div>
+          <canvas id="chart-rubber" class="chart" aria-label="Position over time with rubber band only"></canvas>
+          <div class="axis"><span class="axis-past">12s ago</span><span>now</span></div>
+          <div id="trits-rubber" class="trit-row" role="img" aria-label="Ternary state per tick, rubber band only. High is +1, middle is 0, low is −1. Newest on the right."></div>
+          <dl class="forces">
+            <div><dt>Rubber</dt><dd id="rubber-rubber">0.00</dd></div>
+            <div><dt>Quicksand</dt><dd id="sand-rubber">0.00</dd></div>
+            <div><dt>Velocity</dt><dd id="vel-rubber">0.00</dd></div>
+          </dl>
+          <p id="off-rubber" class="offscale"></p>
+        </article>
+
+        <article class="lane lane-both" id="lane-both">
+          <header>
+            <p class="lane-kicker">Lane C · the idea</p>
+            <h2>Rubber band + quicksand</h2>
+            <p>The same spring, plus drag. It glides to the lip of the band and sticks.</p>
+          </header>
+          <div class="readout">
+            <p><span>Position</span> <strong id="pos-both">+2.20</strong></p>
+            <p><span>Trit</span> <strong id="trit-both" class="trit-pill">+1</strong> <em id="trit-word-both">above</em></p>
+          </div>
+          <canvas id="chart-both" class="chart" aria-label="Position over time with rubber band and quicksand"></canvas>
+          <div class="axis"><span class="axis-past">12s ago</span><span>now</span></div>
+          <div id="trits-both" class="trit-row" role="img" aria-label="Ternary state per tick, rubber band and quicksand. High is +1, middle is 0, low is −1. Newest on the right."></div>
+          <dl class="forces">
+            <div><dt>Rubber</dt><dd id="rubber-both">0.00</dd></div>
+            <div><dt>Quicksand</dt><dd id="sand-both">0.00</dd></div>
+            <div><dt>Velocity</dt><dd id="vel-both">0.00</dd></div>
+          </dl>
+          <p id="off-both" class="offscale"></p>
+        </article>
+      </section>
+
+      <section class="notes">
+        <h2>The step</h2>
+        <ol>
+          <li><code>error = position − target</code></li>
+          <li><code>trit = −1 if error &lt; −band, +1 if error &gt; band, else 0</code></li>
+          <li><code>rubber = trit ≠ 0 ? −stiffness × error : 0</code></li>
+          <li>
+            <code>quicksand = −c × velocity × (1 + |velocity|)</code>
+            with <code>c = thickness</code>, or <code>c = thickness × <span id="hold-factor">4</span></code> when the trit is 0
+          </li>
+          <li><code>velocity += (rubber + noise) × dt</code>, then quicksand removes speed without flipping it</li>
+          <li><code>position += velocity × dt</code></li>
+        </ol>
+        <p>
+          Lane A uses only the noise. Lane B adds the rubber band. Lane C adds both.
+          Drop thickness to 0 and lane C starts swinging like lane B. The three lanes
+          hear one shared kick per tick, so the difference is the damping, not the weather.
+          Reset puts every lane back at <strong>+2.20</strong> with no speed.
+        </p>
+        <details>
+          <summary>Assumptions in this sketch</summary>
+          <ul>
+            <li>The target is fixed at 0. The dead-band slider is a half-width, and the edge counts as trit 0.</li>
+            <li>Noise is one uniform acceleration in [−noise, +noise], reused by all three lanes.</li>
+            <li>The rubber force follows the full error, not only the distance past the band, and it is off on trit 0. Inside the band the value is not chased to the center.</li>
+            <li>Quicksand is linear drag plus a speed-squared term, so a fast swing bogs down harder than a creep. Inside the band it is four times thicker.</li>
+            <li>The integrator is semi-implicit Euler at a fixed 30 steps per second. Drag is clamped so one tick cannot reverse velocity.</li>
+            <li>Reset replays the same noise seed, from the same offset, so the settling comparison is repeatable.</li>
+          </ul>
+        </details>
+      </section>
+      <p id="live-summary" class="sr-only" aria-live="polite"></p>
+    </main>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>
