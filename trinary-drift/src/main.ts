@@ -8,7 +8,7 @@ import {
 } from "./damping";
 
 const DT = 1 / 30;
-const HISTORY = 360;
+const HISTORY = 450;
 const TRIT_CELLS = 48;
 const INITIAL_POSITION = 2.2;
 const SEED = 20261023;
@@ -112,13 +112,11 @@ function syncSliderLabels(): void {
   must<HTMLOutputElement>("#noise-value").textContent = Number(noiseInput.value).toFixed(2);
 }
 
-function viewHalf(deadBand: number): number {
-  let peak = Math.max(2.8, Math.abs(deadBand) * 2.4);
-  for (const lane of lanes) {
-    for (const value of lane.history) {
-      const magnitude = Math.abs(value);
-      if (magnitude > peak) peak = magnitude;
-    }
+function laneHalf(history: number[], deadBand: number): number {
+  let peak = Math.max(2.6, Math.abs(deadBand) * 2.2);
+  for (const value of history) {
+    const magnitude = Math.abs(value);
+    if (magnitude > peak) peak = magnitude;
   }
   return Math.min(peak * 1.12, 80);
 }
@@ -350,10 +348,10 @@ function drawChart(lane: LaneView, yMin: number, yMax: number, deadBand: number)
 
 function draw(): void {
   const params = readParams();
-  const half = viewHalf(params.deadBand);
   tickEl.textContent = String(tick);
   kickEl.textContent = fmt(lastKick);
   for (const lane of lanes) {
+    const half = laneHalf(lane.history, params.deadBand);
     paintReadout(lane, half);
     paintTrits(lane);
     drawChart(lane, -half, half, params.deadBand);
