@@ -1,0 +1,51 @@
+{
+  "_banner": "Staged Fuzzy66 expert trio. Adapted for needle-trio. Not launched by this package.",
+  "status": "STAGED - not launched",
+  "_variant": "fuzzy66",
+  "inference_target": "http://127.0.0.1:5001",
+  "default": "bonsai8b",
+  "fallback_chain": ["hermes14b", "gptoss20b", "bonsai8b"],
+  "protected_ports": [5001, 5011, 18830, 18850, 18860, 18871, 27300, 27301],
+  "avoid_new_ports": [5002, 5021],
+  "experts": [
+    {
+      "name": "hermes14b",
+      "port": 5021,
+      "model": "C:\\AGIOS\\Ara_Brain\\models\\hermes4_14b\\NousResearch_Hermes-4-14B-Q4_K_M.gguf",
+      "role": "persona / deep reasoning",
+      "keywords": ["why", "explain", "reason", "plan", "feel", "philosophy"],
+      "gpulayers": 30,
+      "host": "192.168.0.193",
+      "existing": true,
+      "depth": "deep",
+      "coder": "coder-deep",
+      "note": "Existing KoboldCpp on 5021. This package does not start or stop it. Dial stays loopback unless remote hosts are explicitly allowed."
+    },
+    {
+      "name": "gptoss20b",
+      "port": 5032,
+      "model": "C:\\AGIOS\\Ara_Brain\\moe\\models\\gpt-oss-20b-MXFP4.gguf",
+      "role": "research + sourced summaries (CPU)",
+      "keywords": ["research", "source", "compare", "summarize", "history", "facts"],
+      "gpulayers": 0,
+      "host": "192.168.0.193",
+      "existing": true,
+      "depth": "mid",
+      "coder": "coder-mid",
+      "note": "Staged remote host. This package suggests the expert and does not open the GGUF."
+    },
+    {
+      "name": "bonsai8b",
+      "port": 5033,
+      "model": "C:\\AGIOS\\Models\\Ternary-Bonsai-8B-TQ2_0.gguf",
+      "role": "small talk, short transforms, classifier (CPU)",
+      "keywords": ["hi", "hello", "rewrite", "shorten", "classify", "list"],
+      "gpulayers": 99,
+      "host": "127.0.0.1",
+      "existing": false,
+      "depth": "shallow",
+      "coder": "coder-shallow",
+      "note": "Shallow coder. Model file is a configured path only; this package does not copy or load weights."
+    }
+  ]
+}
