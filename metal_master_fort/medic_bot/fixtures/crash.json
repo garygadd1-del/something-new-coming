@@ -1,0 +1,7 @@
+{
+  "bot": "thermal_gate",
+  "lane": "thermal",
+  "message": "segmentation fault",
+  "exception_type": "SystemError",
+  "exit_code": 139
+}

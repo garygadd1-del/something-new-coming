@@ -1,0 +1,2 @@
+bot bot-07 game_dev rendering selfaware
+bot bot-03 tailor rendering selfaware

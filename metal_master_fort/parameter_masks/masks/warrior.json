@@ -1,0 +1,18 @@
+{
+  "schema": "agios.metal_master.mask.v1",
+  "role": "warrior",
+  "title": "Warrior",
+  "emergent": false,
+  "notes": "Stripped down to combat and threat. Civic parameters are removed. Doctrine stays defense_only. This is the warrior mask: combat and threat remain, everything else is stripped.",
+  "keep": ["combat", "threat"],
+  "strip": ["governance", "diplomacy", "resource_allocation", "triage", "catalog", "memory", "speech", "craft"],
+  "jobs": ["hold_gate", "name_threat", "watch_post"],
+  "upgrade": {},
+  "per_job": {
+    "hold_gate": {
+      "upgrade": {
+        "combat": {"post": "fort_gate"}
+      }
+    }
+  }
+}

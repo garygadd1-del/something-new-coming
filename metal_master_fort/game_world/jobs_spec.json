@@ -1,0 +1,37 @@
+{
+  "schema": "agios.metal_master.jobs_spec.v1",
+  "shifts": ["dawn", "morning", "afternoon", "dusk", "night"],
+  "streets": [
+    "Gate Street",
+    "Kiln Lane",
+    "Paper Court",
+    "North Timber",
+    "Quarry Stair",
+    "Ore Bend",
+    "Brim Shelf",
+    "Anvil Row",
+    "Script Alley",
+    "Caravan Yard",
+    "Market Stoop",
+    "Cooling Green",
+    "Cheap Pass",
+    "Watch Walk",
+    "Ledger Nook"
+  ],
+  "trades": [
+    {"id": "mayor", "title": "Mayor"},
+    {"id": "warrior", "title": "Warrior"},
+    {"id": "tailor", "title": "Tailor"},
+    {"id": "wood_getter", "title": "Wood getter"},
+    {"id": "stone_getter", "title": "Stone getter"},
+    {"id": "mineral_getter", "title": "Mineral getter"},
+    {"id": "sulfur_getter", "title": "Sulfur getter"},
+    {"id": "metals", "title": "Metals"},
+    {"id": "book_librarian", "title": "Book librarian"},
+    {"id": "caravan_master", "title": "Caravan master"},
+    {"id": "marketer", "title": "Marketer"}
+  ],
+  "blank_seats": 24,
+  "bot_count": 50,
+  "max_hats": 3
+}

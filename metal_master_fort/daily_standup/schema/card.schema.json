@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agios.metal_master.standup_card.v1",
+  "type": "object",
+  "required": ["bot", "lane", "goal_hit", "problem_solved", "thing_improved"],
+  "properties": {
+    "bot": {"type": "string"},
+    "lane": {"type": "string"},
+    "goal_hit": {"type": "string"},
+    "problem_solved": {"type": "string"},
+    "thing_improved": {"type": "string"}
+  }
+}

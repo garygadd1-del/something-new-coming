@@ -1,0 +1,8 @@
+{
+  "bot": "thermal_gate",
+  "timestamp": "2026-10-25T06:25:00Z",
+  "readings": {
+    "core_c": 64,
+    "hotspot_c": 72
+  }
+}

@@ -1,0 +1,10 @@
+[package]
+name = "mask_guard"
+version = "0.1.0"
+edition = "2021"
+description = "Immune wrapper for a masked brain. Invalid JSON reroutes."
+publish = false
+
+[[bin]]
+name = "mask_guard"
+path = "src/main.rs"

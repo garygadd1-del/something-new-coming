@@ -1,0 +1,31 @@
+{
+  "schema": "agios.metal_master.mask.v1",
+  "role": "mayor",
+  "title": "Mayor",
+  "emergent": false,
+  "notes": "Full civic stack: governance, diplomacy, and resource allocation, plus speech and memory. Combat and threat are stripped. A job can upgrade resource allocation; it cannot put a stripped parameter back.",
+  "keep": ["governance", "diplomacy", "resource_allocation", "speech", "memory"],
+  "strip": ["combat", "threat", "triage", "catalog", "craft"],
+  "jobs": ["hold_court", "allocate_resources", "hold_thermal_budget", "name_shifts"],
+  "upgrade": {
+    "resource_allocation": {
+      "swarm": ["selfaware", "fuzzy66"]
+    }
+  },
+  "per_job": {
+    "hold_thermal_budget": {
+      "upgrade": {
+        "resource_allocation": {
+          "thermal_policy": {
+            "selfaware_rx_7900_xtx": {"core_c": 80, "hotspot_c": 88},
+            "fuzzy66_rx_6600_cheap_pass": {
+              "core_c": 70,
+              "hotspot_c": 80,
+              "lane": "cheap_pass"
+            }
+          }
+        }
+      }
+    }
+  }
+}

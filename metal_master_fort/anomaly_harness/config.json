@@ -1,0 +1,106 @@
+{
+  "schema": "agios.metal_master.harness_config.v1",
+  "swarm": ["selfaware", "fuzzy66"],
+  "notes": "RX 7900 XTX warn lines are Gary's house policy: 80C core, 88C hotspot. RX 6600 cheap-pass warn lines are fort defaults, 70C core and 80C hotspot, until Gary writes the house numbers. Swarm is selfaware and fuzzy66 only.",
+  "bots": {
+    "thermal_gate": {
+      "collector": "thermal",
+      "host": "selfaware",
+      "gpu": "rx_7900_xtx",
+      "lane": "primary",
+      "metrics": {
+        "core_c": {
+          "unit": "C",
+          "baseline": "both",
+          "policy": "ceiling",
+          "warn": 80,
+          "seed_mean": 64,
+          "seed_stddev": 3,
+          "drift_abs": 6,
+          "drift_k": 2,
+          "strike_limit": 3,
+          "span": [0, 120]
+        },
+        "hotspot_c": {
+          "unit": "C",
+          "baseline": "both",
+          "policy": "ceiling",
+          "warn": 88,
+          "seed_mean": 72,
+          "seed_stddev": 4,
+          "drift_abs": 8,
+          "drift_k": 2,
+          "strike_limit": 3,
+          "span": [0, 120]
+        }
+      }
+    },
+    "fuzzy66_thermal": {
+      "collector": "thermal",
+      "host": "fuzzy66",
+      "gpu": "rx_6600",
+      "lane": "cheap_pass",
+      "metrics": {
+        "core_c": {
+          "unit": "C",
+          "baseline": "both",
+          "policy": "ceiling",
+          "warn": 70,
+          "seed_mean": 55,
+          "seed_stddev": 3,
+          "drift_abs": 6,
+          "drift_k": 2,
+          "strike_limit": 3,
+          "span": [0, 120]
+        },
+        "hotspot_c": {
+          "unit": "C",
+          "baseline": "both",
+          "policy": "ceiling",
+          "warn": 80,
+          "seed_mean": 62,
+          "seed_stddev": 4,
+          "drift_abs": 8,
+          "drift_k": 2,
+          "strike_limit": 3,
+          "span": [0, 120]
+        }
+      }
+    },
+    "trader_scout": {
+      "collector": "trader",
+      "host": "selfaware",
+      "metrics": {
+        "pnl_usd": {
+          "unit": "USD",
+          "baseline": "low",
+          "policy": "floor",
+          "warn": -25,
+          "seed_mean": 0,
+          "seed_stddev": 5,
+          "drift_abs": 15,
+          "drift_k": 2,
+          "strike_limit": 3
+        }
+      }
+    },
+    "network_master": {
+      "collector": "network",
+      "host": "selfaware",
+      "metrics": {
+        "uptime_ratio": {
+          "unit": "ratio",
+          "baseline": "low",
+          "policy": "floor",
+          "warn": 0.98,
+          "seed_mean": 0.999,
+          "seed_stddev": 0.001,
+          "drift_abs": 0.01,
+          "drift_k": 2,
+          "strike_limit": 3,
+          "span": [0, 1]
+        }
+      }
+    }
+  }
+}
