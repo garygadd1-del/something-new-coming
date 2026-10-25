@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "chunk_queue.schema.json",
+  "title": "AGIOS orb-and-chunk queue (normalized)",
+  "description": "Normalized landfall chunk queue. execute is always false: this document plans a pass and does not authorize Godot. Camera pass is wide, close, or mid. Godot --stage is render_stage (showcase index), not the camera pass.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source",
+    "captured_from",
+    "owner",
+    "execute",
+    "project",
+    "jobs"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 2
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "description": "File name of the queue this document was normalized from."
+    },
+    "captured_from": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Where the capture came from. The shipped queue is Fuzzy66 Render_Chunks_20261022."
+    },
+    "owner": {
+      "const": "no-limit-local",
+      "description": "No-Limit Local owns live GPU execution."
+    },
+    "execute": {
+      "const": false,
+      "description": "Normalized queues never authorize execution."
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Godot project directory shared by every job."
+    },
+    "jobs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/job"
+      }
+    }
+  },
+  "$defs": {
+    "job": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ordinal",
+        "id",
+        "site",
+        "camera",
+        "t0",
+        "proj",
+        "mk",
+        "res",
+        "scene",
+        "plan",
+        "render_stage",
+        "seq",
+        "fps",
+        "zoom",
+        "follow",
+        "outdir",
+        "args"
+      ],
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Zero-based index in the captured file."
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^lf_s[0-9]+_(wide|close|mid)_t[0-9]+$"
+        },
+        "site": {
+          "type": "string",
+          "pattern": "^s[0-9]+$"
+        },
+        "camera": {
+          "enum": ["wide", "close", "mid"],
+          "description": "Camera pass. wide, then close, then mid is the pass plan order."
+        },
+        "t0": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Start offset passed to Godot as --t0. Steps of 20 match seq/fps (240/12)."
+        },
+        "proj": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mk": {
+          "type": "string",
+          "minLength": 1
+        },
+        "res": {
+          "const": "1280x720"
+        },
+        "scene": {
+          "const": "res://scenes/showcase.tscn"
+        },
+        "plan": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Absolute plan JSON path on the capture seat (--plan)."
+        },
+        "render_stage": {
+          "const": 5,
+          "description": "Godot --stage value. Showcase index 5, not the camera pass."
+        },
+        "seq": {
+          "const": 240
+        },
+        "fps": {
+          "const": 12
+        },
+        "zoom": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "follow": {
+          "type": "integer",
+          "enum": [0, 1]
+        },
+        "outdir": {
+          "type": "string",
+          "minLength": 1
+        },
+        "args": {
+          "type": "array",
+          "minItems": 10,
+          "maxItems": 10,
+          "prefixItems": [
+            { "const": "res://scenes/showcase.tscn" },
+            { "const": "--" }
+          ],
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Exact Godot user-argument vector from the capture."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "camera": { "const": "wide" } },
+            "required": ["camera"]
+          },
+          "then": {
+            "properties": {
+              "zoom": { "const": 0.6 },
+              "follow": { "const": 0 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "camera": { "const": "close" } },
+            "required": ["camera"]
+          },
+          "then": {
+            "properties": {
+              "zoom": { "const": 1.6 },
+              "follow": { "const": 1 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "camera": { "const": "mid" } },
+            "required": ["camera"]
+          },
+          "then": {
+            "properties": {
+              "zoom": { "const": 1.0 },
+              "follow": { "const": 1 }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
