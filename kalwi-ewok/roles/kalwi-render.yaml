@@ -1,0 +1,35 @@
+# Kalwi-Render seat. Isolation scaffold only.
+# This seat does not seize a GPU. Godot and other GPU work hands off to
+# No-Limit Local / Game Dev.
+name: kalwi-render
+summary: Scaffold a render seat that runs baked stubs and exits. It does not seize a GPU.
+skills:
+  - render-stub
+env:
+  KALWI_ROLE: kalwi-render
+  KALWI_TASK: stub
+  KALWI_GPU: "off"
+  KALWI_SKILLS: render-stub
+  KALWI_PROD_DEPLOY: "0"
+  KALWI_MONEY_SENDS: "0"
+  KALWI_SECRETS: none
+  KALWI_HANDOFF: "No-Limit Local / Game Dev"
+resources:
+  cpus: 0.5
+  memory_mb: 256
+  pids_limit: 64
+network:
+  mode: none
+gpu:
+  seize: false
+  handoff: "No-Limit Local / Game Dev"
+volumes: []
+security:
+  read_only: true
+  no_new_privileges: true
+  cap_drop:
+    - ALL
+gates:
+  prod_deploy: false
+  money_sends: false
+  secrets_in_image: false
