@@ -1,0 +1,34 @@
+# Kalwi-Ledger seat. Honest work-memory stub for the hive.
+# This file is not a payment rail and it does not promise a price.
+name: kalwi-ledger
+summary: Scaffold a ledger seat for work-memory notes. It does not send money or set a price.
+skills:
+  - ledger-stub
+env:
+  KALWI_ROLE: kalwi-ledger
+  KALWI_TASK: stub
+  KALWI_GPU: "off"
+  KALWI_SKILLS: ledger-stub
+  KALWI_PROD_DEPLOY: "0"
+  KALWI_MONEY_SENDS: "0"
+  KALWI_SECRETS: none
+  KALWI_HANDOFF: none
+resources:
+  cpus: 0.25
+  memory_mb: 128
+  pids_limit: 32
+network:
+  mode: none
+gpu:
+  seize: false
+  handoff: none
+volumes: []
+security:
+  read_only: true
+  no_new_privileges: true
+  cap_drop:
+    - ALL
+gates:
+  prod_deploy: false
+  money_sends: false
+  secrets_in_image: false

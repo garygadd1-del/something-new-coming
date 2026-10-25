@@ -1,0 +1,99 @@
+# Local isolation sketch for Kalwi Ewok seats.
+# This is not a production deploy.
+# A plain `docker compose up` starts nothing: each seat is behind a profile.
+# Seats run once and exit, so restart is "no" (quoted so it stays a string).
+# No bind mounts and no named volumes: a mount would open the host tree to
+# the seat and would leave data behind. Skills are baked into the image.
+# No published ports, no GPU devices, no secrets.
+# The launcher is the supported lifecycle. Compose records the same limits.
+
+name: kalwi-ewok
+
+services:
+  kalwi-render:
+    profiles:
+      - render
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kalwi-ewok:local
+    user: "1001:1001"
+    read_only: true
+    network_mode: none
+    restart: "no"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 256m
+    cpus: 0.5
+    pids_limit: 64
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,noexec,size=16m
+    environment:
+      KALWI_ROLE: kalwi-render
+      KALWI_TASK: stub
+      KALWI_GPU: "off"
+      KALWI_SKILLS: render-stub
+      KALWI_PROD_DEPLOY: "0"
+      KALWI_MONEY_SENDS: "0"
+      KALWI_SECRETS: none
+      KALWI_HANDOFF: "No-Limit Local / Game Dev"
+  kalwi-ledger:
+    profiles:
+      - ledger
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kalwi-ewok:local
+    user: "1001:1001"
+    read_only: true
+    network_mode: none
+    restart: "no"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 128m
+    cpus: 0.25
+    pids_limit: 32
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,noexec,size=16m
+    environment:
+      KALWI_ROLE: kalwi-ledger
+      KALWI_TASK: stub
+      KALWI_GPU: "off"
+      KALWI_SKILLS: ledger-stub
+      KALWI_PROD_DEPLOY: "0"
+      KALWI_MONEY_SENDS: "0"
+      KALWI_SECRETS: none
+      KALWI_HANDOFF: none
+  kalwi-scout:
+    profiles:
+      - scout
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kalwi-ewok:local
+    user: "1001:1001"
+    read_only: true
+    network_mode: none
+    restart: "no"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 128m
+    cpus: 0.25
+    pids_limit: 32
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,noexec,size=16m
+    environment:
+      KALWI_ROLE: kalwi-scout
+      KALWI_TASK: stub
+      KALWI_GPU: "off"
+      KALWI_SKILLS: scout-stub
+      KALWI_PROD_DEPLOY: "0"
+      KALWI_MONEY_SENDS: "0"
+      KALWI_SECRETS: none
+      KALWI_HANDOFF: none

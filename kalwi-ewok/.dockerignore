@@ -1,0 +1,46 @@
+# Version control and CI
+.git
+**/.git
+.gitignore
+.github
+.gitlab-ci.yml
+.circleci
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Host-side launcher, tests, and role files stay out of the image.
+# Skills and the entrypoint are the payload.
+tests
+kalwi_ewok
+roles
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+.venv
+venv
+*.egg-info
+
+# Environment and secrets
+**/.npmrc
+**/.env
+**/.env.*
+**/*.pem
+**/*.key
+**/*.p12
+
+# Host scratch from a real --execute run
+runs
+
+# Test and coverage output
+coverage
+.coverage
+htmlcov
+
+# OS files
+.DS_Store
+Thumbs.db

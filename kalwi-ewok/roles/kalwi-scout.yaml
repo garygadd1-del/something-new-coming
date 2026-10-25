@@ -1,0 +1,34 @@
+# Kalwi-Scout seat. Isolation scaffold only.
+# This package does not attach the seat to the house LAN or to the internet.
+name: kalwi-scout
+summary: Scaffold a scout seat that stays off the network. It does not scan a LAN or the internet.
+skills:
+  - scout-stub
+env:
+  KALWI_ROLE: kalwi-scout
+  KALWI_TASK: stub
+  KALWI_GPU: "off"
+  KALWI_SKILLS: scout-stub
+  KALWI_PROD_DEPLOY: "0"
+  KALWI_MONEY_SENDS: "0"
+  KALWI_SECRETS: none
+  KALWI_HANDOFF: none
+resources:
+  cpus: 0.25
+  memory_mb: 128
+  pids_limit: 32
+network:
+  mode: none
+gpu:
+  seize: false
+  handoff: none
+volumes: []
+security:
+  read_only: true
+  no_new_privileges: true
+  cap_drop:
+    - ALL
+gates:
+  prod_deploy: false
+  money_sends: false
+  secrets_in_image: false
