@@ -1,0 +1,6 @@
+# rendering now: Game Dev takes thermal-scheduled slots
+thermal selfaware 80 88 primary
+thermal fuzzy66 70 80 cheap_pass
+bot bot-07 game_dev rendering selfaware
+bot bot-08 game_dev rendering fuzzy66
+bot bot-01 mayor steady selfaware

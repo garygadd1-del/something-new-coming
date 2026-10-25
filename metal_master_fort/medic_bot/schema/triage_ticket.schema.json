@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agios.metal_master.triage_ticket.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "bot",
+    "lane",
+    "class",
+    "summary",
+    "patch",
+    "escalate",
+    "forward_to_harness",
+    "closed_here",
+    "stops_snowball"
+  ],
+  "properties": {
+    "schema": {"const": "agios.metal_master.triage_ticket.v1"},
+    "bot": {"type": "string"},
+    "lane": {"type": "string"},
+    "class": {"enum": ["crash", "config_typo", "real_bug", "unknown"]},
+    "summary": {"type": "string"},
+    "patch": {"type": ["object", "null"]},
+    "escalate": {"type": "boolean"},
+    "forward_to_harness": {"const": false},
+    "closed_here": {"type": "boolean"},
+    "stops_snowball": {"const": true}
+  }
+}

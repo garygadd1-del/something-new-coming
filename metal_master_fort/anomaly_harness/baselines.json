@@ -1,0 +1,148 @@
+{
+  "schema": "agios.metal_master.baselines.v1",
+  "source": "policy_seed",
+  "notes": "RX 7900 XTX warn lines are Gary's house policy: 80C core, 88C hotspot. RX 6600 cheap-pass warn lines are fort defaults, 70C core and 80C hotspot, until Gary writes the house numbers.",
+  "swarm": [
+    "selfaware",
+    "fuzzy66"
+  ],
+  "policy": {
+    "selfaware_rx_7900_xtx": {
+      "core_c": 80,
+      "hotspot_c": 88,
+      "authority": "gary"
+    },
+    "fuzzy66_rx_6600_cheap_pass": {
+      "core_c": 70,
+      "hotspot_c": 80,
+      "lane": "cheap_pass",
+      "authority": "fort_default_pending_gary_number"
+    }
+  },
+  "bots": {
+    "thermal_gate": {
+      "host": "selfaware",
+      "collector": "thermal",
+      "lane": "primary",
+      "gpu": "rx_7900_xtx",
+      "metrics": {
+        "core_c": {
+          "unit": "C",
+          "baseline": "both",
+          "policy": "ceiling",
+          "warn": 80,
+          "mean": 64.0,
+          "stddev": 3.0,
+          "n": 0,
+          "drift_abs": 6,
+          "drift_k": 2,
+          "strike_limit": 3,
+          "span": [
+            0,
+            120
+          ]
+        },
+        "hotspot_c": {
+          "unit": "C",
+          "baseline": "both",
+          "policy": "ceiling",
+          "warn": 88,
+          "mean": 72.0,
+          "stddev": 4.0,
+          "n": 0,
+          "drift_abs": 8,
+          "drift_k": 2,
+          "strike_limit": 3,
+          "span": [
+            0,
+            120
+          ]
+        }
+      }
+    },
+    "fuzzy66_thermal": {
+      "host": "fuzzy66",
+      "collector": "thermal",
+      "lane": "cheap_pass",
+      "gpu": "rx_6600",
+      "metrics": {
+        "core_c": {
+          "unit": "C",
+          "baseline": "both",
+          "policy": "ceiling",
+          "warn": 70,
+          "mean": 55.0,
+          "stddev": 3.0,
+          "n": 0,
+          "drift_abs": 6,
+          "drift_k": 2,
+          "strike_limit": 3,
+          "span": [
+            0,
+            120
+          ]
+        },
+        "hotspot_c": {
+          "unit": "C",
+          "baseline": "both",
+          "policy": "ceiling",
+          "warn": 80,
+          "mean": 62.0,
+          "stddev": 4.0,
+          "n": 0,
+          "drift_abs": 8,
+          "drift_k": 2,
+          "strike_limit": 3,
+          "span": [
+            0,
+            120
+          ]
+        }
+      }
+    },
+    "trader_scout": {
+      "host": "selfaware",
+      "collector": "trader",
+      "lane": null,
+      "gpu": null,
+      "metrics": {
+        "pnl_usd": {
+          "unit": "USD",
+          "baseline": "low",
+          "policy": "floor",
+          "warn": -25,
+          "mean": 0.0,
+          "stddev": 5.0,
+          "n": 0,
+          "drift_abs": 15,
+          "drift_k": 2,
+          "strike_limit": 3
+        }
+      }
+    },
+    "network_master": {
+      "host": "selfaware",
+      "collector": "network",
+      "lane": null,
+      "gpu": null,
+      "metrics": {
+        "uptime_ratio": {
+          "unit": "ratio",
+          "baseline": "low",
+          "policy": "floor",
+          "warn": 0.98,
+          "mean": 0.999,
+          "stddev": 0.001,
+          "n": 0,
+          "drift_abs": 0.01,
+          "drift_k": 2,
+          "strike_limit": 3,
+          "span": [
+            0,
+            1
+          ]
+        }
+      }
+    }
+  }
+}

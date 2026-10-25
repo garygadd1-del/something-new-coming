@@ -1,0 +1,23 @@
+[
+  {
+    "bot": "thermal_gate",
+    "lane": "thermal",
+    "goal_hit": "Held the RX 7900 XTX core under the 80C line.",
+    "problem_solved": "A lasso caught one core reading before a second strike.",
+    "thing_improved": "The baseline post stayed put; collect did not chase the blip."
+  },
+  {
+    "bot": "fuzzy66_thermal",
+    "lane": "thermal",
+    "goal_hit": "Stayed on the RX 6600 cheap-pass lane.",
+    "problem_solved": "No cheap-pass ceiling cross.",
+    "thing_improved": "Reported the fort-default ceiling separately from Gary's 7900 XTX line."
+  },
+  {
+    "bot": "trader_scout",
+    "lane": "trader",
+    "goal_hit": "Watched drill P&L against the planted baseline.",
+    "problem_solved": "Flagged a drawdown at one strike.",
+    "thing_improved": ""
+  }
+]

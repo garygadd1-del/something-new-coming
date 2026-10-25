@@ -1,0 +1,9 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+anomaly_harness/events/*.jsonl
+anomaly_harness/events/streaks.json
+anomaly_harness/events/*.tmp
+*.json.tmp
+rust_wrappers/target/
+game_world/build/
