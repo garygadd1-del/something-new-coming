@@ -42,12 +42,17 @@ def judge(value: float, metric: dict) -> list[str]:
             f"baseline: {fmt(number)} is below {fmt(mean)} by more than {fmt(band)}"
         )
 
-    warn = float(metric["warn"])
     policy = metric["policy"]
-    if policy == "ceiling" and number >= warn:
-        reasons.append(f"policy: {fmt(number)} crossed ceiling {fmt(warn)}")
-    elif policy == "floor" and number <= warn:
-        reasons.append(f"policy: {fmt(number)} crossed floor {fmt(warn)}")
+    if policy == "open":
+        pass
+    elif policy == "ceiling":
+        warn = float(metric["warn"])
+        if number >= warn:
+            reasons.append(f"policy: {fmt(number)} crossed ceiling {fmt(warn)}")
+    elif policy == "floor":
+        warn = float(metric["warn"])
+        if number <= warn:
+            reasons.append(f"policy: {fmt(number)} crossed floor {fmt(warn)}")
 
     span = metric.get("span")
     if span is not None:
@@ -79,9 +84,13 @@ def pullback(bot: dict, kind: str) -> str:
         return ""
     gpu = bot.get("gpu")
     if gpu == "rx_7900_xtx":
-        text = "ease the RX 7900 XTX load on selfaware"
-    elif gpu == "rx_6600":
-        text = "hold the RX 6600 on the cheap-pass lane"
+        text = "ease the RX 7900 XTX load on throne"
+    elif gpu == "rx_9070":
+        text = "ease the RX 9070 core on selfaware"
+    elif gpu == "gtx_1650":
+        text = "ease the GTX 1650 core on selfaware"
+    elif gpu == "rx_7900_gre":
+        text = "the RX 7900 GRE ceiling is OPEN"
     elif bot.get("collector") == "trader":
         text = (
             "pause new trader-scout risk. "

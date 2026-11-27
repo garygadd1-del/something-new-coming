@@ -1,7 +1,8 @@
-"""Medic bot stub.
+"""Medic bot.
 
-Classifies one error as a crash, a config typo, or a real bug.
-A config typo with a close field name gets an in-memory rename proposal.
+Classifies one failure as a crash, a config typo, or a real bug.
+Input is a report object or a local log / traceback. A config typo with a
+close field name gets a rename proposal. The proposal stays in memory.
 Nothing here writes a config file. Escalated tickets are for the morning
 digest. No ticket is forwarded to the anomaly harness: that is the snowball stop.
 """
@@ -54,6 +55,11 @@ FIELD_TOKEN = re.compile(
     r"unknown (?:metric|field|key) ['\"]?([A-Za-z_][A-Za-z0-9_]*)",
     re.IGNORECASE,
 )
+_HEADER = re.compile(
+    r"^(bot|lane|exit|exit_code|exception|exception_type)\s*[:=]\s*(.+)$",
+    re.IGNORECASE,
+)
+_TRACE_TAIL = re.compile(r"^([A-Z][A-Za-z0-9_.]*)(?::\s*.*)?$")
 
 
 def triage(report: dict) -> dict:
@@ -86,10 +92,50 @@ def triage(report: dict) -> dict:
     }
 
 
+def triage_log(text: str) -> dict:
+    """Classify a local log or traceback. The text is fixture content."""
+    return triage(report_from_log(text))
+
+
+def report_from_log(text: str) -> dict:
+    """Turn a local log into the report object ``triage`` already accepts.
+
+    Leading ``bot``, ``lane``, ``exit``, and ``exception`` lines are headers.
+    The rest is the message. A traceback's last line can name the exception.
+    """
+    if not isinstance(text, str) or not text.strip():
+        raise MedicError("log is empty")
+    fields: dict[str, str] = {}
+    body: list[str] = []
+    started = False
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not started:
+            if not stripped:
+                continue
+            match = _HEADER.match(stripped)
+            if match:
+                fields[_header_key(match.group(1))] = match.group(2).strip()
+                continue
+            started = True
+        body.append(line.rstrip("\n"))
+    message = "\n".join(body).strip()
+    bot = fields.get("bot")
+    if not isinstance(bot, str) or not bot.strip():
+        raise MedicError("log is missing bot")
+    return {
+        "bot": bot,
+        "lane": fields.get("lane") or "untied",
+        "message": message,
+        "exception_type": fields.get("exception_type") or _exception_from_trace(message),
+        "exit_code": _exit_code(fields.get("exit_code")),
+    }
+
+
 def apply_proposal(document: dict, patch: dict) -> dict:
-    """Return a renamed copy. This stub does not write the copy anywhere."""
+    """Return a renamed copy. The copy stays in memory and is not written."""
     if not isinstance(patch, dict) or patch.get("op") != "rename_key":
-        raise MedicError("only a rename_key patch can be applied in this stub")
+        raise MedicError("only a rename_key patch can be applied in memory")
     root = copy.deepcopy(document)
     path = patch.get("path") or []
     if not isinstance(path, list):
@@ -115,6 +161,24 @@ def apply_proposal(document: dict, patch: dict) -> dict:
         parent = parent[key]
     parent[path[-1]] = rebuilt
     return root
+
+
+class RenameLedger:
+    """Rename proposals held on this object. It has no path and writes nothing."""
+
+    def __init__(self) -> None:
+        self.proposals: list[dict] = []
+
+    def record(self, ticket: dict) -> None:
+        patch = ticket.get("patch") if isinstance(ticket, dict) else None
+        if patch is None:
+            return
+        self.proposals.append(copy.deepcopy(patch))
+
+    def apply(self, document: dict, index: int = -1) -> dict:
+        if not self.proposals:
+            raise MedicError("no rename proposal is in memory")
+        return apply_proposal(document, self.proposals[index])
 
 
 def incident_from_ticket(ticket: dict, morning: str) -> dict:
@@ -176,6 +240,36 @@ def suggest_field(token: str) -> str | None:
     if len(close) == 1:
         return close[0]
     return None
+
+
+def _header_key(raw: str) -> str:
+    key = raw.lower()
+    if key in ("exit", "exit_code"):
+        return "exit_code"
+    if key in ("exception", "exception_type"):
+        return "exception_type"
+    return key
+
+
+def _exit_code(raw: str | None):
+    if raw is None or raw.lower() in ("none", "null"):
+        return None
+    try:
+        return int(raw, 10)
+    except ValueError as exc:
+        raise MedicError("exit code is not an integer") from exc
+
+
+def _exception_from_trace(message: str) -> str:
+    last = ""
+    for line in message.splitlines():
+        stripped = line.strip()
+        if stripped:
+            last = stripped
+    match = _TRACE_TAIL.fullmatch(last)
+    if match is None:
+        return ""
+    return match.group(1)
 
 
 def _summary(kind: str, message: str) -> str:

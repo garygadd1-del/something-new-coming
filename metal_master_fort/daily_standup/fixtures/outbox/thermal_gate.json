@@ -1,0 +1,7 @@
+{
+  "bot": "thermal_gate",
+  "lane": "thermal",
+  "goal_hit": "Watched the SelfAware RX 9070 against Gary's 85C core cap. Hotspot and load stay OPEN.",
+  "problem_solved": "A lasso caught one core reading before a second strike.",
+  "thing_improved": "The baseline post stayed put; collect did not chase the blip."
+}

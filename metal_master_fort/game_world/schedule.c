@@ -1,19 +1,28 @@
 /*
- * Metal Master Fort — scheduling stub.
+ * Metal Master Fort — shift-job scheduler.
  *
  * Minutes depend on role and the bot's current goal. A rendering goal gives
- * game_dev a thermal-scheduled slot. SelfAware stays inside Gary's RX 7900 XTX
- * line (80C core / 88C hotspot). Fuzzy 66 stays on the RX 6600 cheap-pass lane
- * (fort default 70C core / 80C hotspot).
+ * game_dev a thermal-scheduled slot inside Gary's standing caps (2026-11-25):
+ * Throne RX 7900 XTX 86C core / 88C hotspot / 80% load,
+ * SelfAware RX 9070 85C core, SelfAware GTX 1650 80C core.
+ * Hotspot and load on the 9070 and the 1650 are OPEN.
+ * Fuzzy 66 has only the RX 7900 GRE. Its ceiling is OPEN.
  *
- * The swarm is selfaware and fuzzy66 only.
+ * The planted swarm list is selfaware and fuzzy66 only. Throne may appear
+ * on a thermal line. A bot line may not name Throne.
  * This program reads a local text file. It does not open a socket.
  *
- *   thermal <host> <core_c> <hotspot_c> <lane>
+ *   thermal throne rx_7900_xtx <core_c> <hotspot_c> <load_pct>
+ *   thermal selfaware rx_9070 <core_c>
+ *   thermal selfaware gtx_1650 <core_c>
  *   bot <id> <role> <goal> <host>
+ *   seat <blank-id> <minutes>
  *
- * A thermal line may tighten a ceiling. It may not loosen one.
+ * A thermal line may tighten a standing cap. It may not loosen one.
  * A refused thermal line leaves the previous ceiling in place.
+ * A fuzzy66 thermal line is refused because the GRE ceiling is OPEN.
+ * A seat line assigns minutes to a blank job id. It has no name field.
+ * BLANK_MINUTES_CAP is an EXAMPLE until the owner sets a blank-seat budget.
  *
  * stdout is OK lines, REROUTE lines, then SUMMARY.
  * exit 0: all OK. exit 2: nothing scheduled, or usage. exit 3: mixed.
@@ -25,18 +34,20 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define XTX_CORE_C 80
-#define XTX_HOTSPOT_C 88
-#define FUZZY_CORE_C 70
-#define FUZZY_HOTSPOT_C 80
+#define THRONE_CORE_C 86
+#define THRONE_HOTSPOT_C 88
+#define THRONE_LOAD_PCT 80
+#define CORE_9070_C 85
+#define CORE_1650_C 80
+/* EXAMPLE until the owner sets a blank-seat minute cap.
+   45 is the longest role slot already assigned in this file. */
+#define BLANK_MINUTES_CAP 45
 
 #define MAX_LINE 512
 #define MAX_TOK 8
 
-static int g_self_core = XTX_CORE_C;
-static int g_self_hot = XTX_HOTSPOT_C;
-static int g_fuzzy_core = FUZZY_CORE_C;
-static int g_fuzzy_hot = FUZZY_HOTSPOT_C;
+static int g_9070_core = CORE_9070_C;
+static int g_1650_core = CORE_1650_C;
 static int g_ok = 0;
 static int g_reroute = 0;
 
@@ -155,15 +166,18 @@ static int minutes_for(
             if (copy_text(window, window_len, "thermal_selfaware") != 0) {
                 return -1;
             }
-            if (write_note(note, note_len, "rx7900xtx_core%d_hotspot%d", g_self_core, g_self_hot) != 0) {
+            if (write_note(note, note_len, "rx9070_core%d_gtx1650_core%d", g_9070_core, g_1650_core) != 0) {
                 return -1;
             }
             return 40;
         }
-        if (copy_text(window, window_len, "cheap_pass") != 0) {
+        if (strcmp(host, "fuzzy66") != 0) {
             return -1;
         }
-        if (write_note(note, note_len, "rx6600_cheap_pass_core%d_hotspot%d", g_fuzzy_core, g_fuzzy_hot) != 0) {
+        if (copy_text(window, window_len, "thermal_fuzzy66") != 0) {
+            return -1;
+        }
+        if (copy_text(note, note_len, "rx7900gre_ceiling_open") != 0) {
             return -1;
         }
         return 20;
@@ -230,47 +244,121 @@ static int minutes_for(
     return 15;
 }
 
+static int blank_id(const char *text)
+{
+    size_t index;
+    size_t length;
+
+    if (text == NULL || strncmp(text, "blank.", 6) != 0) {
+        return 0;
+    }
+    length = strlen(text);
+    if (length < 7 || length > 9) {
+        return 0;
+    }
+    for (index = 6; index < length; index++) {
+        if (!isdigit((unsigned char)text[index])) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+static int parse_minutes(const char *text, int *out)
+{
+    char *end = NULL;
+    long value;
+
+    if (text == NULL || !isdigit((unsigned char)text[0])) {
+        return -1;
+    }
+    errno = 0;
+    value = strtol(text, &end, 10);
+    if (errno != 0 || end == text || *end != '\0') {
+        return -1;
+    }
+    if (value < 1 || value > BLANK_MINUTES_CAP) {
+        return -1;
+    }
+    *out = (int)value;
+    return 0;
+}
+
+static void apply_seat(char **tok, int count)
+{
+    int minutes = 0;
+
+    if (count > 3) {
+        reroute("blank seat names stay blank");
+        return;
+    }
+    if (count != 3 || !blank_id(tok[1])) {
+        reroute("blank seat line refused");
+        return;
+    }
+    if (parse_minutes(tok[2], &minutes) != 0) {
+        reroute("blank seat minutes refused");
+        return;
+    }
+    printf("OK seat=%s minutes=%d name=\n", tok[1], minutes);
+    g_ok++;
+}
+
 static void apply_thermal(char **tok, int count)
 {
     int core = 0;
     int hot = 0;
-    int ceiling_core;
-    int ceiling_hot;
+    int load = 0;
 
-    if (count != 5 || !slugish(tok[1]) || !slugish(tok[4])) {
+    if (count < 3 || !slugish(tok[1]) || !slugish(tok[2])) {
         reroute("thermal line refused");
         return;
     }
-    if (strcmp(tok[1], "selfaware") == 0) {
-        ceiling_core = XTX_CORE_C;
-        ceiling_hot = XTX_HOTSPOT_C;
-        if (strcmp(tok[4], "primary") != 0) {
-            reroute("selfaware lane must be primary");
-            return;
-        }
-    } else if (strcmp(tok[1], "fuzzy66") == 0) {
-        ceiling_core = FUZZY_CORE_C;
-        ceiling_hot = FUZZY_HOTSPOT_C;
-        if (strcmp(tok[4], "cheap_pass") != 0) {
-            reroute("fuzzy66 lane must be cheap_pass");
-            return;
-        }
-    } else {
-        reroute("thermal host is outside the swarm");
+    if (strcmp(tok[1], "fuzzy66") == 0) {
+        reroute("fuzzy66 RX 7900 GRE ceiling is OPEN");
         return;
     }
-    if (parse_temp(tok[2], ceiling_core, &core) != 0
-        || parse_temp(tok[3], ceiling_hot, &hot) != 0) {
-        reroute("thermal ceiling cannot loosen the house line");
+    if (strcmp(tok[1], "throne") == 0 && strcmp(tok[2], "rx_7900_xtx") == 0) {
+        if (count != 6) {
+            reroute("thermal line refused");
+            return;
+        }
+        if (parse_temp(tok[3], THRONE_CORE_C, &core) != 0
+            || parse_temp(tok[4], THRONE_HOTSPOT_C, &hot) != 0
+            || parse_temp(tok[5], THRONE_LOAD_PCT, &load) != 0) {
+            reroute("thermal ceiling cannot loosen the house line");
+            return;
+        }
+        (void)core;
+        (void)hot;
+        (void)load;
         return;
     }
-    if (strcmp(tok[1], "selfaware") == 0) {
-        g_self_core = core;
-        g_self_hot = hot;
-    } else {
-        g_fuzzy_core = core;
-        g_fuzzy_hot = hot;
+    if (strcmp(tok[1], "selfaware") == 0 && strcmp(tok[2], "rx_9070") == 0) {
+        if (count != 4) {
+            reroute(count > 4 ? "hotspot is OPEN" : "thermal line refused");
+            return;
+        }
+        if (parse_temp(tok[3], CORE_9070_C, &core) != 0) {
+            reroute("thermal ceiling cannot loosen the house line");
+            return;
+        }
+        g_9070_core = core;
+        return;
     }
+    if (strcmp(tok[1], "selfaware") == 0 && strcmp(tok[2], "gtx_1650") == 0) {
+        if (count != 4) {
+            reroute(count > 4 ? "hotspot is OPEN" : "thermal line refused");
+            return;
+        }
+        if (parse_temp(tok[3], CORE_1650_C, &core) != 0) {
+            reroute("thermal ceiling cannot loosen the house line");
+            return;
+        }
+        g_1650_core = core;
+        return;
+    }
+    reroute("thermal host is outside the standing caps");
 }
 
 static void apply_bot(char **tok, int count)
@@ -316,6 +404,10 @@ static void handle_line(char *line)
     }
     if (strcmp(tok[0], "bot") == 0) {
         apply_bot(tok, count);
+        return;
+    }
+    if (strcmp(tok[0], "seat") == 0) {
+        apply_seat(tok, count);
         return;
     }
     reroute("unknown command");

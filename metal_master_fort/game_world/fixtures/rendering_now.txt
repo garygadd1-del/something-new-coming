@@ -1,6 +1,8 @@
-# rendering now: Game Dev takes thermal-scheduled slots
-thermal selfaware 80 88 primary
-thermal fuzzy66 70 80 cheap_pass
+# Gary standing caps 2026-11-25. Equal to the cap is allowed.
+# Fuzzy 66's GRE ceiling is OPEN, so this file does not set one.
+thermal throne rx_7900_xtx 86 88 80
+thermal selfaware rx_9070 85
+thermal selfaware gtx_1650 80
 bot bot-07 game_dev rendering selfaware
 bot bot-08 game_dev rendering fuzzy66
 bot bot-01 mayor steady selfaware

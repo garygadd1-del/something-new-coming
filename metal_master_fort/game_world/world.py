@@ -4,6 +4,9 @@ Hundreds of shift jobs come from trades × streets × shifts. Blank seats stay
 blank. A bot's street name is used on shift. A bot's real name is used when
 clocked out. This scaffold does not invent either name: the bot picks them.
 
+``blank_seat_lines`` writes scheduler input for those blank seats. The line
+carries an id and a caller-supplied minute count. It does not carry a name.
+
 The 3D world these jobs belong to, and any robot body that would enter Gary's
 world, are not built here. See rust_wrappers/LANGUAGES.md.
 """
@@ -17,6 +20,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 NAME_LIMIT = 48
+# EXAMPLE until the owner sets a blank-seat minute cap.
+# 45 is the longest role slot already assigned in schedule.c.
+BLANK_MINUTES_CAP = 45
 
 
 class WorldError(ValueError):
@@ -138,6 +144,25 @@ def display_name(bot: dict) -> str:
     if bot.get("real_name"):
         return bot["real_name"]
     return bot["id"]
+
+
+def blank_seat_lines(jobs: list[dict], minutes: int) -> list[str]:
+    """Scheduler lines for blank seats. Names are not written.
+
+    ``minutes`` is caller-supplied. This function does not pick a budget.
+    """
+    if isinstance(minutes, bool) or not isinstance(minutes, int):
+        raise WorldError("blank seat minutes must be a whole number")
+    if minutes < 1 or minutes > BLANK_MINUTES_CAP:
+        raise WorldError("blank seat minutes are outside the example cap")
+    lines = []
+    for job in jobs:
+        if not job.get("blank"):
+            continue
+        if job.get("street_name") or job.get("title") or job.get("trade"):
+            raise WorldError("blank seat has a name")
+        lines.append(f"seat {job['id']} {minutes}")
+    return lines
 
 
 def rotate(bots: list[dict], jobs: list[dict], day_index: int) -> dict:

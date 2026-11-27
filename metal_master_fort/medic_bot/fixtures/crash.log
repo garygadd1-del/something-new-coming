@@ -1,0 +1,4 @@
+bot: thermal_gate
+lane: thermal
+exit: 139
+segmentation fault

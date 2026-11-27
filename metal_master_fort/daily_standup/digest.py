@@ -1,11 +1,16 @@
-"""Daily standup stub.
+"""Daily standup.
 
 Each bot card answers three things, tied to a lane: goal hit, problem solved,
-thing improved. Roll call records who is present. Presence is not an Approval
-Gate grant. Incidents are listed; this module does not close them.
+thing improved. Cards come from a local JSON file or an outbox directory.
+Roll call records who is present. Presence is not copied into Approval Gate
+grants. Incidents are listed; this module does not close them and does not
+write a grant.
 """
 
 from __future__ import annotations
+
+import json
+from pathlib import Path
 
 APPROVAL_NOTE = (
     "Presence is not approval. The Approval Gate is a human door. "
@@ -20,6 +25,29 @@ class DigestError(ValueError):
     """The cards or the roll call are not usable."""
 
 
+def load_cards(path) -> list:
+    """Read cards from a JSON list or from one JSON object per file in a directory."""
+    dest = Path(path)
+    if dest.is_dir():
+        files = sorted(file for file in dest.glob("*.json") if file.is_file())
+        if not files:
+            raise DigestError("outbox has no cards")
+        cards = []
+        for file in files:
+            data = json.loads(file.read_text(encoding="utf-8"))
+            if isinstance(data, list):
+                cards.extend(data)
+            elif isinstance(data, dict):
+                cards.append(data)
+            else:
+                raise DigestError("card file must be an object")
+        return cards
+    data = json.loads(dest.read_text(encoding="utf-8"))
+    if not isinstance(data, list):
+        raise DigestError("cards must be a list")
+    return data
+
+
 def build_digest(cards, roll_call, incidents, morning: str | None = None) -> dict:
     if not isinstance(roll_call, dict):
         raise DigestError("roll call must be an object")
@@ -31,6 +59,7 @@ def build_digest(cards, roll_call, incidents, morning: str | None = None) -> dic
         raise DigestError("morning is missing")
     gate = roll_call.get("approval_gate") if isinstance(roll_call.get("approval_gate"), dict) else {}
     note = gate.get("note") or APPROVAL_NOTE
+    # Echo a grant only when the roll call already holds one. Presence is not a grant.
     grants = list(gate.get("grants") or [])
     by_bot = {}
     for entry in roster:
@@ -130,9 +159,6 @@ def render_markdown(digest: dict) -> str:
 
 
 def log_incident(path, incident: dict) -> None:
-    import json
-    from pathlib import Path
-
     dest = Path(path)
     dest.parent.mkdir(parents=True, exist_ok=True)
     with dest.open("a", encoding="utf-8") as handle:
@@ -140,9 +166,6 @@ def log_incident(path, incident: dict) -> None:
 
 
 def load_incidents(path) -> list[dict]:
-    import json
-    from pathlib import Path
-
     dest = Path(path)
     if not dest.exists():
         return []

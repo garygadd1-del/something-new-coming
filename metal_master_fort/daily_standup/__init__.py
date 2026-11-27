@@ -1,1 +1,1 @@
-"""One morning digest from roll call, lane cards, and incidents."""
+"""One morning digest from local fixture files. Roll call is not an approval grant."""

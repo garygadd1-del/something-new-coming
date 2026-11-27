@@ -8,10 +8,14 @@ import pytest
 
 from anomaly_harness.harness import main
 from house_policy import (
-    FUZZY_CHEAP_PASS_CORE_C,
-    FUZZY_CHEAP_PASS_HOTSPOT_C,
+    CORE_1650_C,
+    CORE_9070_C,
+    GRE_GPU,
+    GPU_9070,
+    STANDING_CAPS,
     XTX_CORE_C,
     XTX_HOTSPOT_C,
+    XTX_LOAD_PCT,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -62,28 +66,47 @@ def reasons_of(events, metric):
     return [reason for event in events if event["metric"] == metric for reason in event["reasons"]]
 
 
-def test_seed_baselines_keep_gary_line_and_fort_default(tmp_path):
+def test_seed_baselines_keep_gary_standing_caps(tmp_path):
     root = harness_root(tmp_path)
     init(root)
     baselines = json.loads((root / "baselines.json").read_text(encoding="utf-8"))
     committed = json.loads((PKG / "baselines.json").read_text(encoding="utf-8"))
     assert baselines == committed
     assert baselines["swarm"] == ["selfaware", "fuzzy66"]
+    assert "throne" not in baselines["swarm"]
     assert baselines["source"] == "policy_seed"
-    xtx = baselines["policy"]["selfaware_rx_7900_xtx"]
-    fuzzy = baselines["policy"]["fuzzy66_rx_6600_cheap_pass"]
-    assert xtx == {"core_c": XTX_CORE_C, "hotspot_c": XTX_HOTSPOT_C, "authority": "gary"}
-    assert fuzzy["core_c"] == FUZZY_CHEAP_PASS_CORE_C
-    assert fuzzy["hotspot_c"] == FUZZY_CHEAP_PASS_HOTSPOT_C
-    assert fuzzy["lane"] == "cheap_pass"
-    assert fuzzy["authority"] == "fort_default_pending_gary_number"
+    assert "selfaware_rx_7900_xtx" not in baselines["policy"]
+    assert "fuzzy66_rx_6600_cheap_pass" not in baselines["policy"]
+    throne = baselines["policy"]["throne_rx_7900_xtx"]
+    assert throne == {
+        "core_c": XTX_CORE_C,
+        "hotspot_c": XTX_HOTSPOT_C,
+        "load_pct": XTX_LOAD_PCT,
+        "authority": "gary",
+        "standing_caps": STANDING_CAPS,
+    }
+    card_9070 = baselines["policy"]["selfaware_rx_9070"]
+    assert card_9070["core_c"] == CORE_9070_C
+    assert card_9070["hotspot_c"] is None
+    assert card_9070["load_pct"] is None
+    assert card_9070["authority"] == "gary"
+    card_1650 = baselines["policy"]["selfaware_gtx_1650"]
+    assert card_1650["core_c"] == CORE_1650_C
+    assert card_1650["hotspot_c"] is None
+    assert card_1650["load_pct"] is None
     thermal = baselines["bots"]["thermal_gate"]
-    assert thermal["metrics"]["core_c"]["warn"] == 80
-    assert thermal["metrics"]["hotspot_c"]["warn"] == 88
+    assert thermal["host"] == "selfaware"
+    assert thermal["gpu"] == GPU_9070
+    assert thermal["metrics"]["core_c"]["warn"] == CORE_9070_C
+    assert thermal["metrics"]["hotspot_c"]["warn"] is None
+    assert thermal["metrics"]["hotspot_c"]["policy"] == "open"
     assert thermal["metrics"]["core_c"]["n"] == 0
     fuzzy_bot = baselines["bots"]["fuzzy66_thermal"]
-    assert fuzzy_bot["lane"] == "cheap_pass"
-    assert fuzzy_bot["metrics"]["core_c"]["warn"] == 70
+    assert fuzzy_bot["host"] == "fuzzy66"
+    assert fuzzy_bot["gpu"] == GRE_GPU
+    assert fuzzy_bot["lane"] is None
+    assert fuzzy_bot["metrics"]["core_c"]["warn"] is None
+    assert fuzzy_bot["metrics"]["core_c"]["policy"] == "open"
 
 
 def test_steady_thermal_csv_is_in_band(tmp_path):
@@ -117,7 +140,7 @@ def test_core_drift_is_a_lasso_before_the_policy_line(tmp_path):
     assert any(reason.startswith("baseline:") for reason in event["reasons"])
     assert not any(reason.startswith("policy:") for reason in event["reasons"])
     assert "before this becomes a third strike" in event["pullback"]
-    assert "RX 7900 XTX" in event["pullback"]
+    assert "RX 9070" in event["pullback"]
     for key in EVENT_SCHEMA["required"]:
         assert key in event
     hotspot = [event for event in payload["events"] if event["metric"] == "hotspot_c"]
@@ -136,7 +159,8 @@ def test_policy_line_is_still_a_lasso_on_the_first_reading(tmp_path):
     joined = " ".join(event["reasons"])
     assert "baseline:" in joined
     assert "policy:" in joined
-    assert "80" in joined
+    assert str(CORE_9070_C) in joined
+    assert event["value"] == CORE_9070_C
 
 
 def test_three_hot_readings_reach_strike_three(tmp_path):
@@ -172,10 +196,10 @@ def test_cold_reading_and_release(tmp_path):
     assert "thermal_gate.core_c" not in streaks["open"]
 
 
-def test_fuzzy_cheap_pass_lasso_uses_the_fort_default(tmp_path):
+def test_fuzzy_gre_lasso_is_baseline_only(tmp_path):
     root = harness_root(tmp_path)
     init(root)
-    collect(root, "fuzzy66_thermal", FIX / "fuzzy_cheap_pass.json")
+    collect(root, "fuzzy66_thermal", FIX / "fuzzy_gre_drift.json")
     code, payload = check(root)
     assert code == 3
     event = next(event for event in payload["events"] if event["metric"] == "core_c")
@@ -184,8 +208,9 @@ def test_fuzzy_cheap_pass_lasso_uses_the_fort_default(tmp_path):
     assert event["consecutive"] == 1
     assert any(reason.startswith("baseline:") for reason in event["reasons"])
     assert not any(reason.startswith("policy:") for reason in event["reasons"])
-    assert "cheap-pass" in event["pullback"]
-    assert "RX 6600" in event["pullback"]
+    assert "RX 7900 GRE" in event["pullback"]
+    assert "OPEN" in event["pullback"]
+    assert "6600" not in event["pullback"]
 
 
 def test_trader_and_network_stubs_lasso_before_their_floors(tmp_path):
@@ -235,10 +260,10 @@ def test_from_samples_replants_one_metric_and_leaves_the_rest(tmp_path):
     assert core["n"] == 2
     assert core["mean"] == 15
     assert core["stddev"] == pytest.approx(50**0.5)
-    assert core["warn"] == 80
+    assert core["warn"] == CORE_9070_C
     assert hotspot["n"] == 0
     assert hotspot["mean"] == 72
-    assert hotspot["warn"] == 88
+    assert hotspot["warn"] is None
 
 
 def test_unknown_metric_is_a_data_error_not_a_strike(tmp_path):
@@ -294,7 +319,7 @@ def test_loosened_ceiling_is_refused(tmp_path):
     (root / "config.json").write_text(json.dumps(config), encoding="utf-8")
     code, _out, err = run(["--root", str(root), "baseline-init"])
     assert code == 2
-    assert "80" in err
+    assert "85" in err
 
 
 def test_report_names_both_ceilings(tmp_path):
@@ -304,7 +329,10 @@ def test_report_names_both_ceilings(tmp_path):
     assert check(root)[0] == 3
     code, out, err = run(["--root", str(root), "report"])
     assert code == 0, err
-    assert "Gary policy: selfaware RX 7900 XTX core 80C / hotspot 88C" in out
-    assert "Fort default (pending Gary's number): fuzzy66 RX 6600 cheap-pass core 70C / hotspot 80C" in out
+    assert "Throne RX 7900 XTX core 86C / hotspot 88C / load 80%" in out
+    assert "SelfAware RX 9070 core 85C. Hotspot and load are OPEN." in out
+    assert "SelfAware GTX 1650 core 80C. Hotspot and load are OPEN." in out
+    assert "Fuzzy 66 RX 7900 GRE ceiling is OPEN." in out
+    assert "6600" not in out
     assert "lasso is ahead of strike-three" in out
     assert "swarm: selfaware, fuzzy66" in out

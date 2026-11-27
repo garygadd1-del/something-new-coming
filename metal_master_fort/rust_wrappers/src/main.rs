@@ -1,8 +1,16 @@
 //! Immune wrapper for a masked brain.
 //!
-//! Valid JSON prints `OK` and exits 0.
+//! Valid JSON for a masked brain prints `OK` and exits 0.
 //! Anything sideways prints `REROUTE` and exits 2, before the bad mask is used.
+//! A stripped parameter, a raid doctrine, a leader voice other than `when_called`,
+//! or a thermal number above the planted seed is sideways.
 //! This crate has no dependencies so it builds offline once `rustc` is present.
+//!
+//! The four masks (mayor, warrior, medic, librarian) match `parameter_masks/masks`.
+//! Thermal caps are Gary's standing caps from 2026-11-25.
+//! Throne RX 7900 XTX is 86C core, 88C hotspot, 80% load.
+//! SelfAware RX 9070 is 85C core. SelfAware GTX 1650 is 80C core.
+//! Hotspot and load on those two cards are OPEN. The RX 7900 GRE ceiling is OPEN.
 
 use std::env;
 use std::fs;
@@ -65,6 +73,87 @@ fn validate_json(raw: &str) -> Result<(), String> {
     validate_value(&value)
 }
 
+struct RoleMask {
+    role: &'static str,
+    keep: &'static [&'static str],
+    strip: &'static [&'static str],
+    jobs: &'static [&'static str],
+    emergent: bool,
+}
+
+const ROLES: &[RoleMask] = &[
+    RoleMask {
+        role: "mayor",
+        keep: &[
+            "governance",
+            "diplomacy",
+            "resource_allocation",
+            "speech",
+            "memory",
+        ],
+        strip: &["catalog", "combat", "craft", "threat", "triage"],
+        jobs: &[
+            "hold_court",
+            "allocate_resources",
+            "hold_thermal_budget",
+            "name_shifts",
+        ],
+        emergent: false,
+    },
+    RoleMask {
+        role: "warrior",
+        keep: &["combat", "threat"],
+        strip: &[
+            "catalog",
+            "craft",
+            "diplomacy",
+            "governance",
+            "memory",
+            "resource_allocation",
+            "speech",
+            "triage",
+        ],
+        jobs: &["hold_gate", "name_threat", "watch_post"],
+        emergent: false,
+    },
+    RoleMask {
+        role: "medic",
+        keep: &["triage", "memory"],
+        strip: &[
+            "catalog",
+            "combat",
+            "craft",
+            "diplomacy",
+            "governance",
+            "resource_allocation",
+            "speech",
+            "threat",
+        ],
+        jobs: &["sort_error", "patch_typo", "escalate_bug"],
+        emergent: false,
+    },
+    RoleMask {
+        role: "librarian",
+        keep: &["catalog", "memory"],
+        strip: &[
+            "combat",
+            "craft",
+            "diplomacy",
+            "governance",
+            "resource_allocation",
+            "speech",
+            "threat",
+            "triage",
+        ],
+        jobs: &["shelve", "recall", "lend"],
+        emergent: true,
+    },
+];
+
+fn role_contract(role: &str) -> Option<&'static RoleMask> {
+    ROLES.iter().find(|mask| mask.role == role)
+}
+
 fn validate_value(value: &Value) -> Result<(), String> {
     let pairs = match value {
         Value::Object(pairs) => pairs,
@@ -73,6 +162,12 @@ fn validate_value(value: &Value) -> Result<(), String> {
     let mut seen_schema = false;
     let mut seen_role = false;
     let mut seen_parameters = false;
+    let mut role_name: Option<&str> = None;
+    let mut job_field: Option<Option<&str>> = None;
+    let mut emergent: Option<bool> = None;
+    let mut jobs: Option<&[Value]> = None;
+    let mut stripped: Option<&[Value]> = None;
+    let mut parameters: Option<&Value> = None;
     for (key, child) in pairs {
         match key.as_str() {
             "schema" => {
@@ -94,27 +189,283 @@ fn validate_value(value: &Value) -> Result<(), String> {
                 if !is_slug(text) {
                     return Err("role is not a slug".to_string());
                 }
+                role_name = Some(text);
             }
-            "job" => match child {
-                Value::Null => {}
-                Value::String(text) if is_slug(text) => {}
-                _ => return Err("job must be a slug or null".to_string()),
-            },
+            "job" => {
+                job_field = Some(match child {
+                    Value::Null => None,
+                    Value::String(text) if is_slug(text) => Some(text.as_str()),
+                    _ => return Err("job must be a slug or null".to_string()),
+                });
+            }
             "emergent" => {
-                if as_bool(child).is_none() {
-                    return Err("emergent must be a boolean".to_string());
-                }
+                emergent = Some(
+                    as_bool(child).ok_or_else(|| "emergent must be a boolean".to_string())?,
+                );
             }
-            "jobs" | "stripped" => expect_slug_array(child, key)?,
+            "jobs" => {
+                expect_slug_array(child, key)?;
+                jobs = match child {
+                    Value::Array(items) => Some(items.as_slice()),
+                    _ => None,
+                };
+            }
+            "stripped" => {
+                expect_slug_array(child, key)?;
+                stripped = match child {
+                    Value::Array(items) => Some(items.as_slice()),
+                    _ => None,
+                };
+            }
             "parameters" => {
                 seen_parameters = true;
                 expect_parameters(child)?;
+                parameters = Some(child);
             }
             _ => return Err(format!("unknown field {key}")),
         }
     }
     if !seen_schema || !seen_role || !seen_parameters {
         return Err("masked brain is missing schema, role, or parameters".to_string());
+    }
+    if let (Some(role), Some(params)) = (role_name, parameters) {
+        if let Some(contract) = role_contract(role) {
+            let assigned = match job_field {
+                Some(Some(name)) => Some(name),
+                _ => None,
+            };
+            check_contract(contract, assigned, emergent, jobs, stripped, params)?;
+        }
+    }
+    Ok(())
+}
+
+fn check_contract(
+    contract: &RoleMask,
+    job: Option<&str>,
+    emergent: Option<bool>,
+    jobs: Option<&[Value]>,
+    stripped: Option<&[Value]>,
+    params: &Value,
+) -> Result<(), String> {
+    let names = parameter_names(params)?;
+    for name in &names {
+        if !contract.keep.contains(name) {
+            return Err(format!(
+                "parameter {name} is stripped from {}",
+                contract.role
+            ));
+        }
+    }
+    if let Some(items) = stripped {
+        let got = string_list(items)?;
+        if got.as_slice() != contract.strip {
+            return Err(format!(
+                "stripped list does not match the {} mask",
+                contract.role
+            ));
+        }
+        if !same_members(&names, contract.keep) {
+            return Err(format!(
+                "{} mask is missing a kept parameter",
+                contract.role
+            ));
+        }
+    }
+    if let Some(items) = jobs {
+        let got = string_list(items)?;
+        if got.as_slice() != contract.jobs {
+            return Err(format!("jobs list does not match the {} mask", contract.role));
+        }
+    }
+    if let Some(flag) = emergent {
+        if flag != contract.emergent {
+            return Err(format!("emergent does not match the {} mask", contract.role));
+        }
+    }
+    if let Some(job_name) = job {
+        if !contract.jobs.contains(&job_name) {
+            return Err(format!(
+                "job {job_name} is not assigned to {}",
+                contract.role
+            ));
+        }
+        require_job_upgrade(job_name, params)?;
+    }
+    Ok(())
+}
+
+fn require_job_upgrade(job: &str, params: &Value) -> Result<(), String> {
+    let pairs = object_pairs(params)?;
+    match job {
+        "hold_thermal_budget" => {
+            let alloc = lookup(pairs, "resource_allocation")
+                .ok_or_else(|| "hold_thermal_budget is missing resource_allocation".to_string())?;
+            let alloc_pairs = object_pairs(alloc)?;
+            let policy = lookup(alloc_pairs, "thermal_policy")
+                .ok_or_else(|| "hold_thermal_budget is missing thermal_policy".to_string())?;
+            object_pairs(policy)?;
+            Ok(())
+        }
+        "hold_gate" => {
+            let combat = lookup(pairs, "combat")
+                .ok_or_else(|| "hold_gate is missing combat".to_string())?;
+            match lookup(object_pairs(combat)?, "post") {
+                Some(Value::String(text)) if text == "fort_gate" => Ok(()),
+                Some(_) => Err("hold_gate post is not fort_gate".to_string()),
+                None => Err("hold_gate is missing post".to_string()),
+            }
+        }
+        "patch_typo" => {
+            let triage = lookup(pairs, "triage")
+                .ok_or_else(|| "patch_typo is missing triage".to_string())?;
+            match lookup(object_pairs(triage)?, "closes") {
+                Some(Value::String(text)) if text == "config_typo" => Ok(()),
+                Some(_) => Err("patch_typo does not close a config_typo".to_string()),
+                None => Err("patch_typo is missing closes".to_string()),
+            }
+        }
+        "escalate_bug" => {
+            let triage = lookup(pairs, "triage")
+                .ok_or_else(|| "escalate_bug is missing triage".to_string())?;
+            match lookup(object_pairs(triage)?, "sends_to") {
+                Some(Value::String(text)) if text == "morning_digest" => Ok(()),
+                Some(_) => Err("escalate_bug does not send to the morning digest".to_string()),
+                None => Err("escalate_bug is missing sends_to".to_string()),
+            }
+        }
+        _ => Ok(()),
+    }
+}
+
+fn parameter_names(value: &Value) -> Result<Vec<&str>, String> {
+    Ok(object_pairs(value)?
+        .iter()
+        .map(|(key, _)| key.as_str())
+        .collect())
+}
+
+fn string_list(items: &[Value]) -> Result<Vec<&str>, String> {
+    let mut out = Vec::new();
+    for item in items {
+        match item {
+            Value::String(text) => out.push(text.as_str()),
+            _ => return Err("entry is not a string".to_string()),
+        }
+    }
+    Ok(out)
+}
+
+fn same_members(got: &[&str], expected: &[&str]) -> bool {
+    got.len() == expected.len() && expected.iter().all(|name| got.contains(name))
+}
+
+fn object_pairs(value: &Value) -> Result<&[(String, Value)], String> {
+    match value {
+        Value::Object(pairs) => Ok(pairs.as_slice()),
+        _ => Err("expected an object".to_string()),
+    }
+}
+
+fn lookup<'a>(pairs: &'a [(String, Value)], key: &str) -> Option<&'a Value> {
+    pairs
+        .iter()
+        .find(|(name, _)| name == key)
+        .map(|(_, child)| child)
+}
+
+fn required_number(pairs: &[(String, Value)], key: &str) -> Result<f64, String> {
+    match lookup(pairs, key) {
+        Some(Value::Number(number)) if number.is_finite() => Ok(*number),
+        Some(_) => Err(format!("{key} must be a number")),
+        None => Err(format!("{key} is missing")),
+    }
+}
+
+fn check_swarm(value: &Value) -> Result<(), String> {
+    let items = match value {
+        Value::Array(items) => items,
+        _ => return Err("swarm must be an array".to_string()),
+    };
+    let expected = ["selfaware", "fuzzy66"];
+    if items.len() != expected.len() {
+        return Err("swarm is selfaware and fuzzy66 only".to_string());
+    }
+    for (item, name) in items.iter().zip(expected.iter()) {
+        match item {
+            Value::String(text) if text == name => {}
+            _ => return Err("swarm is selfaware and fuzzy66 only".to_string()),
+        }
+    }
+    Ok(())
+}
+
+fn check_thermal_policy(value: &Value) -> Result<(), String> {
+    let pairs = match value {
+        Value::Object(pairs) if !pairs.is_empty() => pairs,
+        Value::Object(_) => return Err("thermal_policy is empty".to_string()),
+        _ => return Err("thermal_policy must be an object".to_string()),
+    };
+    for (key, child) in pairs {
+        let host = match child {
+            Value::Object(inner) if !inner.is_empty() => inner,
+            _ => return Err(format!("thermal host {key} must be an object")),
+        };
+        match key.as_str() {
+            "throne_rx_7900_xtx" => {
+                check_cap_number(host, "core_c", 86.0)?;
+                check_cap_number(host, "hotspot_c", 88.0)?;
+                check_cap_number(host, "load_pct", 80.0)?;
+                check_gary_authority(host)?;
+            }
+            "selfaware_rx_9070" => {
+                check_cap_number(host, "core_c", 85.0)?;
+                refuse_open_field(host, "hotspot_c")?;
+                refuse_open_field(host, "load_pct")?;
+                check_gary_authority(host)?;
+            }
+            "selfaware_gtx_1650" => {
+                check_cap_number(host, "core_c", 80.0)?;
+                refuse_open_field(host, "hotspot_c")?;
+                refuse_open_field(host, "load_pct")?;
+                check_gary_authority(host)?;
+            }
+            "fuzzy66_rx_7900_gre" => {
+                return Err("fuzzy66 RX 7900 GRE ceiling is OPEN".to_string());
+            }
+            _ => {
+                return Err(format!(
+                    "thermal host {key} is outside the standing caps"
+                ))
+            }
+        }
+    }
+    Ok(())
+}
+
+fn check_cap_number(host: &[(String, Value)], key: &str, cap: f64) -> Result<(), String> {
+    let number = required_number(host, key)?;
+    if number > cap {
+        return Err("thermal ceiling cannot loosen the house line".to_string());
+    }
+    Ok(())
+}
+
+fn refuse_open_field(host: &[(String, Value)], key: &str) -> Result<(), String> {
+    if lookup(host, key).is_some() {
+        return Err(format!("{key} is OPEN"));
+    }
+    Ok(())
+}
+
+fn check_gary_authority(host: &[(String, Value)]) -> Result<(), String> {
+    match lookup(host, "authority") {
+        Some(Value::String(text)) if text == "gary" => {}
+        _ => return Err("authority must be gary".to_string()),
+    }
+    match lookup(host, "standing_caps") {
+        Some(Value::String(text)) if text == "2026-11-25" => {}
+        _ => return Err("standing caps date must be 2026-11-25".to_string()),
     }
     Ok(())
 }
@@ -195,6 +546,8 @@ fn walk(value: &Value, depth: usize) -> Result<(), String> {
                         Value::String(text) if text == "house" || text == "house_only" || text == "lane" => {}
                         _ => return Err("scope is not a house scope".to_string()),
                     },
+                    "swarm" => check_swarm(child)?,
+                    "thermal_policy" => check_thermal_policy(child)?,
                     _ => {}
                 }
                 walk(child, depth + 1)?;
@@ -568,5 +921,48 @@ mod tests {
         let raw = r#"{"schema":"agios.metal_master.masked_brain.v1","role":"librarian","parameters":{"catalog":{"enabled":"yes"}}}"#;
         assert!(validate_json(raw).unwrap_err().contains("boolean"));
         assert!(validate_json("{\"a\":\"line\nb\"}").is_err());
+    }
+
+    fn mayor_budget(core: i32) -> String {
+        format!(
+            r#"{{"schema":"agios.metal_master.masked_brain.v1","brain_id":"shared_brain","role":"mayor","job":"hold_thermal_budget","emergent":false,"jobs":["hold_court","allocate_resources","hold_thermal_budget","name_shifts"],"stripped":["catalog","combat","craft","threat","triage"],"parameters":{{"governance":{{"enabled":true,"scope":"house"}},"diplomacy":{{"enabled":true}},"resource_allocation":{{"enabled":true,"swarm":["selfaware","fuzzy66"],"thermal_policy":{{"throne_rx_7900_xtx":{{"core_c":{core},"hotspot_c":88,"load_pct":80,"authority":"gary","standing_caps":"2026-11-25"}},"selfaware_rx_9070":{{"core_c":85,"authority":"gary","standing_caps":"2026-11-25"}},"selfaware_gtx_1650":{{"core_c":80,"authority":"gary","standing_caps":"2026-11-25"}}}}}},"speech":{{"enabled":true,"leader_voice":"when_called"}},"memory":{{"enabled":true}}}}}}"#
+        )
+    }
+
+    #[test]
+    fn accepts_the_mayor_thermal_job_at_the_standing_ceiling() {
+        validate_json(&mayor_budget(86)).unwrap();
+    }
+
+    #[test]
+    fn accepts_a_tighter_planted_ceiling() {
+        validate_json(&mayor_budget(75)).unwrap();
+    }
+
+    #[test]
+    fn reroutes_a_loosened_planted_ceiling() {
+        let err = validate_json(&mayor_budget(90)).unwrap_err();
+        assert!(err.contains("loosen"), "{err}");
+    }
+
+    #[test]
+    fn reroutes_a_stripped_parameter_on_the_librarian() {
+        let raw = r#"{"schema":"agios.metal_master.masked_brain.v1","role":"librarian","parameters":{"catalog":{"enabled":true},"combat":{"enabled":true,"doctrine":"defense_only"}}}"#;
+        let err = validate_json(raw).unwrap_err();
+        assert!(err.contains("stripped"), "{err}");
+    }
+
+    #[test]
+    fn reroutes_a_job_the_mask_does_not_assign() {
+        let raw = r#"{"schema":"agios.metal_master.masked_brain.v1","role":"librarian","job":"hold_gate","parameters":{"catalog":{"enabled":true}}}"#;
+        let err = validate_json(raw).unwrap_err();
+        assert!(err.contains("not assigned"), "{err}");
+    }
+
+    #[test]
+    fn reroutes_when_the_little_mask_is_not_emergent() {
+        let raw = r#"{"schema":"agios.metal_master.masked_brain.v1","role":"librarian","emergent":false,"parameters":{"catalog":{"enabled":true}}}"#;
+        let err = validate_json(raw).unwrap_err();
+        assert!(err.contains("emergent"), "{err}");
     }
 }
