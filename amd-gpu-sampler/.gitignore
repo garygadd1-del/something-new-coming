@@ -1,0 +1,13 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+state.json
+state.json.tmp
+log/
+sampler.pid
+sampler.pid.stopped
+sampler.pid.stopped.*
+STOP
+STOP.*.done
+gpu_state_*.json
+gpu_state_*.json.tmp

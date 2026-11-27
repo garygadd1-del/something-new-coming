@@ -1,0 +1,24 @@
+[project]
+name = "amd-gpu-sampler"
+version = "0.1.0"
+description = "Read-only AMD/Windows GPU and system health sampler for AGIOS inner world"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+amd-gpu-sampler = "amd_gpu_sampler.sampler:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["amd_gpu_sampler*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
