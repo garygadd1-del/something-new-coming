@@ -1,0 +1,4 @@
+bot: thermal_gate
+lane: thermal
+exit: 2
+HarnessError: unknown metric coreC for thermal_gate

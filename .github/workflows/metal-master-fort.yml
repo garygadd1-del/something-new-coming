@@ -1,0 +1,28 @@
+name: metal-master-fort
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    paths:
+      - "metal_master_fort/**"
+      - ".github/workflows/metal-master-fort.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: dtolnay/rust-toolchain@1.83.0
+      - name: Install pytest
+        run: python -m pip install pytest
+      - name: Fort tests
+        working-directory: metal_master_fort
+        run: python -m pytest -q

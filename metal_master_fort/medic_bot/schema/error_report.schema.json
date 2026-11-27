@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agios.metal_master.error_report.v1",
+  "type": "object",
+  "required": ["bot", "message"],
+  "properties": {
+    "bot": {"type": "string"},
+    "lane": {"type": "string"},
+    "message": {"type": "string"},
+    "exception_type": {"type": "string"},
+    "exit_code": {"type": ["integer", "null"]},
+    "config_path": {"type": "string"}
+  }
+}

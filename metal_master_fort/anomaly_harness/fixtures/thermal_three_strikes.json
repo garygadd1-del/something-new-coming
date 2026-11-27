@@ -1,0 +1,11 @@
+{
+  "bot": "thermal_gate",
+  "samples": [
+    {"metric": "core_c", "value": 82, "timestamp": "2026-10-25T07:00:00Z"},
+    {"metric": "hotspot_c", "value": 74, "timestamp": "2026-10-25T07:00:00Z"},
+    {"metric": "core_c", "value": 83, "timestamp": "2026-10-25T07:05:00Z"},
+    {"metric": "hotspot_c", "value": 74, "timestamp": "2026-10-25T07:05:00Z"},
+    {"metric": "core_c", "value": 84, "timestamp": "2026-10-25T07:10:00Z"},
+    {"metric": "hotspot_c", "value": 75, "timestamp": "2026-10-25T07:10:00Z"}
+  ]
+}

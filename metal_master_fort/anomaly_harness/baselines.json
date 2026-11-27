@@ -1,0 +1,158 @@
+{
+  "schema": "agios.metal_master.baselines.v1",
+  "source": "policy_seed",
+  "notes": "Gary standing caps 2026-11-25. Throne RX 7900 XTX: 86C core, 88C hotspot, 80% load. SelfAware RX 9070: 85C core. Hotspot and load are OPEN. SelfAware GTX 1650: 80C core. Hotspot and load are OPEN. Fuzzy 66 has only the RX 7900 GRE. Its ceiling is OPEN. The older cards were pulled because the PSU cannot run the GRE plus those cards. Throne is not on the planted swarm list.",
+  "swarm": [
+    "selfaware",
+    "fuzzy66"
+  ],
+  "policy": {
+    "throne_rx_7900_xtx": {
+      "core_c": 86,
+      "hotspot_c": 88,
+      "load_pct": 80,
+      "authority": "gary",
+      "standing_caps": "2026-11-25"
+    },
+    "selfaware_rx_9070": {
+      "core_c": 85,
+      "hotspot_c": null,
+      "load_pct": null,
+      "authority": "gary",
+      "standing_caps": "2026-11-25"
+    },
+    "selfaware_gtx_1650": {
+      "core_c": 80,
+      "hotspot_c": null,
+      "load_pct": null,
+      "authority": "gary",
+      "standing_caps": "2026-11-25"
+    }
+  },
+  "bots": {
+    "thermal_gate": {
+      "host": "selfaware",
+      "collector": "thermal",
+      "lane": "primary",
+      "gpu": "rx_9070",
+      "metrics": {
+        "core_c": {
+          "unit": "C",
+          "baseline": "both",
+          "policy": "ceiling",
+          "warn": 85,
+          "mean": 64.0,
+          "stddev": 3.0,
+          "n": 0,
+          "drift_abs": 6,
+          "drift_k": 2,
+          "strike_limit": 3,
+          "span": [
+            0,
+            120
+          ]
+        },
+        "hotspot_c": {
+          "unit": "C",
+          "baseline": "both",
+          "policy": "open",
+          "warn": null,
+          "mean": 72.0,
+          "stddev": 4.0,
+          "n": 0,
+          "drift_abs": 8,
+          "drift_k": 2,
+          "strike_limit": 3,
+          "span": [
+            0,
+            120
+          ]
+        }
+      }
+    },
+    "fuzzy66_thermal": {
+      "host": "fuzzy66",
+      "collector": "thermal",
+      "lane": null,
+      "gpu": "rx_7900_gre",
+      "metrics": {
+        "core_c": {
+          "unit": "C",
+          "baseline": "both",
+          "policy": "open",
+          "warn": null,
+          "mean": 55.0,
+          "stddev": 3.0,
+          "n": 0,
+          "drift_abs": 6,
+          "drift_k": 2,
+          "strike_limit": 3,
+          "span": [
+            0,
+            120
+          ]
+        },
+        "hotspot_c": {
+          "unit": "C",
+          "baseline": "both",
+          "policy": "open",
+          "warn": null,
+          "mean": 62.0,
+          "stddev": 4.0,
+          "n": 0,
+          "drift_abs": 8,
+          "drift_k": 2,
+          "strike_limit": 3,
+          "span": [
+            0,
+            120
+          ]
+        }
+      }
+    },
+    "trader_scout": {
+      "host": "selfaware",
+      "collector": "trader",
+      "lane": null,
+      "gpu": null,
+      "metrics": {
+        "pnl_usd": {
+          "unit": "USD",
+          "baseline": "low",
+          "policy": "floor",
+          "warn": -25,
+          "mean": 0.0,
+          "stddev": 5.0,
+          "n": 0,
+          "drift_abs": 15,
+          "drift_k": 2,
+          "strike_limit": 3
+        }
+      }
+    },
+    "network_master": {
+      "host": "selfaware",
+      "collector": "network",
+      "lane": null,
+      "gpu": null,
+      "metrics": {
+        "uptime_ratio": {
+          "unit": "ratio",
+          "baseline": "low",
+          "policy": "floor",
+          "warn": 0.98,
+          "mean": 0.999,
+          "stddev": 0.001,
+          "n": 0,
+          "drift_abs": 0.01,
+          "drift_k": 2,
+          "strike_limit": 3,
+          "span": [
+            0,
+            1
+          ]
+        }
+      }
+    }
+  }
+}

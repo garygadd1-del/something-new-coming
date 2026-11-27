@@ -1,0 +1,23 @@
+{
+  "schema": "agios.metal_master.mask.v1",
+  "role": "medic",
+  "title": "Medic",
+  "emergent": false,
+  "notes": "Triage seat. The patch_typo job may close a config typo. A crash or a real bug is escalated. The ticket is not forwarded into the anomaly harness.",
+  "keep": ["triage", "memory"],
+  "strip": ["governance", "diplomacy", "resource_allocation", "combat", "threat", "catalog", "speech", "craft"],
+  "jobs": ["sort_error", "patch_typo", "escalate_bug"],
+  "upgrade": {},
+  "per_job": {
+    "patch_typo": {
+      "upgrade": {
+        "triage": {"closes": "config_typo"}
+      }
+    },
+    "escalate_bug": {
+      "upgrade": {
+        "triage": {"sends_to": "morning_digest"}
+      }
+    }
+  }
+}

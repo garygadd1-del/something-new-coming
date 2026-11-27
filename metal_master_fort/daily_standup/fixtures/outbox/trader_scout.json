@@ -1,0 +1,7 @@
+{
+  "bot": "trader_scout",
+  "lane": "trader",
+  "goal_hit": "Watched drill P&L against the planted baseline.",
+  "problem_solved": "Flagged a drawdown at one strike.",
+  "thing_improved": ""
+}

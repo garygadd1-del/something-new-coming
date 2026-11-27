@@ -1,0 +1,12 @@
+{
+  "schema": "agios.metal_master.mask.v1",
+  "role": "librarian",
+  "title": "Librarian",
+  "emergent": true,
+  "notes": "Little mask: catalog and memory only. Shelve, recall, and lend are the assigned jobs. Behavior past that, inside those two parameters, is the emergent part. A stripped parameter that appears mid-task is sideways, and the wrapper reroutes it.",
+  "keep": ["catalog", "memory"],
+  "strip": ["governance", "diplomacy", "resource_allocation", "combat", "threat", "triage", "speech", "craft"],
+  "jobs": ["shelve", "recall", "lend"],
+  "upgrade": {},
+  "per_job": {}
+}

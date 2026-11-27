@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agios.metal_master.job.v1",
+  "type": "object",
+  "required": ["schema", "id", "trade", "title", "street_name", "street", "shift", "seats", "assigned", "blank"],
+  "properties": {
+    "schema": {"const": "agios.metal_master.job.v1"},
+    "id": {"type": "string"},
+    "trade": {"type": ["string", "null"]},
+    "title": {"type": ["string", "null"]},
+    "street_name": {"type": ["string", "null"]},
+    "street": {"type": ["string", "null"]},
+    "shift": {"type": ["string", "null"]},
+    "seats": {"type": "integer"},
+    "assigned": {"type": "array"},
+    "blank": {"type": "boolean"}
+  }
+}

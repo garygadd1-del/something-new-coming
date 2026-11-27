@@ -1,0 +1,14 @@
+{
+  "schema": "agios.metal_master.roll_call.v1",
+  "morning": "2026-10-25",
+  "approval_gate": {
+    "note": "Presence is not approval. The Approval Gate is a human door. A bot marked present has answered roll call. It has not been granted a human-gate action.",
+    "grants": []
+  },
+  "roster": [
+    {"bot": "thermal_gate", "lane": "thermal", "present": true},
+    {"bot": "fuzzy66_thermal", "lane": "thermal", "present": true},
+    {"bot": "trader_scout", "lane": "trader", "present": true},
+    {"bot": "network_master", "lane": "network", "present": false}
+  ]
+}

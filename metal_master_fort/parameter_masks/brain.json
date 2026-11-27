@@ -1,0 +1,16 @@
+{
+  "schema": "agios.metal_master.brain.v1",
+  "id": "shared_brain",
+  "parameters": {
+    "governance": {"enabled": true, "scope": "house"},
+    "diplomacy": {"enabled": true, "tone": "family"},
+    "resource_allocation": {"enabled": true, "thermal_aware": true},
+    "combat": {"enabled": true, "doctrine": "defense_only"},
+    "threat": {"enabled": true, "scope": "house_only"},
+    "triage": {"enabled": true},
+    "catalog": {"enabled": true},
+    "memory": {"enabled": true},
+    "speech": {"enabled": true, "leader_voice": "when_called"},
+    "craft": {"enabled": true}
+  }
+}

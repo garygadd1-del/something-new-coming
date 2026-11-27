@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agios.metal_master.anomaly_event.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "timestamp",
+    "bot",
+    "host",
+    "collector",
+    "metric",
+    "kind",
+    "value",
+    "baseline_mean",
+    "consecutive",
+    "strike_limit",
+    "reasons",
+    "pullback"
+  ],
+  "properties": {
+    "schema": {"const": "agios.metal_master.anomaly_event.v1"},
+    "timestamp": {"type": "string"},
+    "bot": {"type": "string"},
+    "host": {"type": "string"},
+    "collector": {"type": "string"},
+    "metric": {"type": "string"},
+    "kind": {"enum": ["lasso", "strike", "release"]},
+    "value": {"type": "number"},
+    "baseline_mean": {"type": "number"},
+    "consecutive": {"type": "integer"},
+    "strike_limit": {"type": "integer"},
+    "reasons": {"type": "array", "items": {"type": "string"}},
+    "pullback": {"type": "string"}
+  }
+}

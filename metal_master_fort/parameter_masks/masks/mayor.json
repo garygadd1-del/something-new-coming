@@ -1,0 +1,42 @@
+{
+  "schema": "agios.metal_master.mask.v1",
+  "role": "mayor",
+  "title": "Mayor",
+  "emergent": false,
+  "notes": "Full civic stack: governance, diplomacy, and resource allocation, plus speech and memory. Combat and threat are stripped. A job can upgrade resource allocation; it cannot put a stripped parameter back. hold_thermal_budget records Gary's standing caps from 2026-11-25. Throne RX 7900 XTX is 86C core, 88C hotspot, 80% load. SelfAware RX 9070 is 85C core. SelfAware GTX 1650 is 80C core. Hotspot and load on those two cards are OPEN. The RX 7900 GRE ceiling is OPEN and is not in this upgrade.",
+  "keep": ["governance", "diplomacy", "resource_allocation", "speech", "memory"],
+  "strip": ["combat", "threat", "triage", "catalog", "craft"],
+  "jobs": ["hold_court", "allocate_resources", "hold_thermal_budget", "name_shifts"],
+  "upgrade": {
+    "resource_allocation": {
+      "swarm": ["selfaware", "fuzzy66"]
+    }
+  },
+  "per_job": {
+    "hold_thermal_budget": {
+      "upgrade": {
+        "resource_allocation": {
+          "thermal_policy": {
+            "throne_rx_7900_xtx": {
+              "core_c": 86,
+              "hotspot_c": 88,
+              "load_pct": 80,
+              "authority": "gary",
+              "standing_caps": "2026-11-25"
+            },
+            "selfaware_rx_9070": {
+              "core_c": 85,
+              "authority": "gary",
+              "standing_caps": "2026-11-25"
+            },
+            "selfaware_gtx_1650": {
+              "core_c": 80,
+              "authority": "gary",
+              "standing_caps": "2026-11-25"
+            }
+          }
+        }
+      }
+    }
+  }
+}

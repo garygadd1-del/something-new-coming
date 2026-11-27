@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agios.metal_master.masked_brain.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "brain_id", "role", "job", "emergent", "jobs", "stripped", "parameters"],
+  "properties": {
+    "schema": {"const": "agios.metal_master.masked_brain.v1"},
+    "brain_id": {"type": "string"},
+    "role": {"type": "string"},
+    "job": {"type": ["string", "null"]},
+    "emergent": {"type": "boolean"},
+    "jobs": {"type": "array", "items": {"type": "string"}},
+    "stripped": {"type": "array", "items": {"type": "string"}},
+    "parameters": {"type": "object"}
+  }
+}

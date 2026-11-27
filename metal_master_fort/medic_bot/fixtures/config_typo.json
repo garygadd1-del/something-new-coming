@@ -1,0 +1,7 @@
+{
+  "bot": "thermal_gate",
+  "lane": "thermal",
+  "message": "unknown metric coreC for thermal_gate",
+  "exception_type": "HarnessError",
+  "exit_code": 2
+}

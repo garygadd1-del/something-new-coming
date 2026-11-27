@@ -1,0 +1,7 @@
+{
+  "bot": "trader_scout",
+  "lane": "trader",
+  "message": "assertion failed: streak count went backwards",
+  "exception_type": "AssertionError",
+  "exit_code": 1
+}

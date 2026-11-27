@@ -1,0 +1,1 @@
+thermal selfaware rx_9070 90
