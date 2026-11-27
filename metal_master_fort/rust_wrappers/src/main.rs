@@ -7,8 +7,10 @@
 //! This crate has no dependencies so it builds offline once `rustc` is present.
 //!
 //! The four masks (mayor, warrior, medic, librarian) match `parameter_masks/masks`.
-//! Thermal caps here are the planted harness seed, not the hardware inventory.
-//! Ceilings for Throne, the RX 9070, the GTX 1650, and the RX 7900 GRE are OPEN.
+//! Thermal caps are Gary's standing caps from 2026-11-25.
+//! Throne RX 7900 XTX is 86C core, 88C hotspot, 80% load.
+//! SelfAware RX 9070 is 85C core. SelfAware GTX 1650 is 80C core.
+//! Hotspot and load on those two cards are OPEN. The RX 7900 GRE ceiling is OPEN.
 
 use std::env;
 use std::fs;
@@ -405,30 +407,65 @@ fn check_thermal_policy(value: &Value) -> Result<(), String> {
         _ => return Err("thermal_policy must be an object".to_string()),
     };
     for (key, child) in pairs {
-        let (core_cap, hot_cap, lane) = match key.as_str() {
-            "selfaware_rx_7900_xtx" => (80.0, 88.0, None),
-            "fuzzy66_rx_6600_cheap_pass" => (70.0, 80.0, Some("cheap_pass")),
-            _ => {
-                return Err(format!(
-                    "thermal host {key} is outside the planted ceilings"
-                ))
-            }
-        };
         let host = match child {
             Value::Object(inner) if !inner.is_empty() => inner,
             _ => return Err(format!("thermal host {key} must be an object")),
         };
-        let core = required_number(host, "core_c")?;
-        let hot = required_number(host, "hotspot_c")?;
-        if core > core_cap || hot > hot_cap {
-            return Err("thermal ceiling cannot loosen the house line".to_string());
-        }
-        if let Some(expected) = lane {
-            match lookup(host, "lane") {
-                Some(Value::String(text)) if text == expected => {}
-                _ => return Err("fuzzy66 lane must be cheap_pass".to_string()),
+        match key.as_str() {
+            "throne_rx_7900_xtx" => {
+                check_cap_number(host, "core_c", 86.0)?;
+                check_cap_number(host, "hotspot_c", 88.0)?;
+                check_cap_number(host, "load_pct", 80.0)?;
+                check_gary_authority(host)?;
+            }
+            "selfaware_rx_9070" => {
+                check_cap_number(host, "core_c", 85.0)?;
+                refuse_open_field(host, "hotspot_c")?;
+                refuse_open_field(host, "load_pct")?;
+                check_gary_authority(host)?;
+            }
+            "selfaware_gtx_1650" => {
+                check_cap_number(host, "core_c", 80.0)?;
+                refuse_open_field(host, "hotspot_c")?;
+                refuse_open_field(host, "load_pct")?;
+                check_gary_authority(host)?;
+            }
+            "fuzzy66_rx_7900_gre" => {
+                return Err("fuzzy66 RX 7900 GRE ceiling is OPEN".to_string());
+            }
+            _ => {
+                return Err(format!(
+                    "thermal host {key} is outside the standing caps"
+                ))
             }
         }
+    }
+    Ok(())
+}
+
+fn check_cap_number(host: &[(String, Value)], key: &str, cap: f64) -> Result<(), String> {
+    let number = required_number(host, key)?;
+    if number > cap {
+        return Err("thermal ceiling cannot loosen the house line".to_string());
+    }
+    Ok(())
+}
+
+fn refuse_open_field(host: &[(String, Value)], key: &str) -> Result<(), String> {
+    if lookup(host, key).is_some() {
+        return Err(format!("{key} is OPEN"));
+    }
+    Ok(())
+}
+
+fn check_gary_authority(host: &[(String, Value)]) -> Result<(), String> {
+    match lookup(host, "authority") {
+        Some(Value::String(text)) if text == "gary" => {}
+        _ => return Err("authority must be gary".to_string()),
+    }
+    match lookup(host, "standing_caps") {
+        Some(Value::String(text)) if text == "2026-11-25" => {}
+        _ => return Err("standing caps date must be 2026-11-25".to_string()),
     }
     Ok(())
 }
@@ -888,13 +925,13 @@ mod tests {
 
     fn mayor_budget(core: i32) -> String {
         format!(
-            r#"{{"schema":"agios.metal_master.masked_brain.v1","brain_id":"shared_brain","role":"mayor","job":"hold_thermal_budget","emergent":false,"jobs":["hold_court","allocate_resources","hold_thermal_budget","name_shifts"],"stripped":["catalog","combat","craft","threat","triage"],"parameters":{{"governance":{{"enabled":true,"scope":"house"}},"diplomacy":{{"enabled":true}},"resource_allocation":{{"enabled":true,"swarm":["selfaware","fuzzy66"],"thermal_policy":{{"selfaware_rx_7900_xtx":{{"core_c":{core},"hotspot_c":88}},"fuzzy66_rx_6600_cheap_pass":{{"core_c":70,"hotspot_c":80,"lane":"cheap_pass"}}}}}},"speech":{{"enabled":true,"leader_voice":"when_called"}},"memory":{{"enabled":true}}}}}}"#
+            r#"{{"schema":"agios.metal_master.masked_brain.v1","brain_id":"shared_brain","role":"mayor","job":"hold_thermal_budget","emergent":false,"jobs":["hold_court","allocate_resources","hold_thermal_budget","name_shifts"],"stripped":["catalog","combat","craft","threat","triage"],"parameters":{{"governance":{{"enabled":true,"scope":"house"}},"diplomacy":{{"enabled":true}},"resource_allocation":{{"enabled":true,"swarm":["selfaware","fuzzy66"],"thermal_policy":{{"throne_rx_7900_xtx":{{"core_c":{core},"hotspot_c":88,"load_pct":80,"authority":"gary","standing_caps":"2026-11-25"}},"selfaware_rx_9070":{{"core_c":85,"authority":"gary","standing_caps":"2026-11-25"}},"selfaware_gtx_1650":{{"core_c":80,"authority":"gary","standing_caps":"2026-11-25"}}}}}},"speech":{{"enabled":true,"leader_voice":"when_called"}},"memory":{{"enabled":true}}}}}}"#
         )
     }
 
     #[test]
-    fn accepts_the_mayor_thermal_job_at_the_planted_ceiling() {
-        validate_json(&mayor_budget(80)).unwrap();
+    fn accepts_the_mayor_thermal_job_at_the_standing_ceiling() {
+        validate_json(&mayor_budget(86)).unwrap();
     }
 
     #[test]

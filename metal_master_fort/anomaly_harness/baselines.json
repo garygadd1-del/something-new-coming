@@ -1,22 +1,32 @@
 {
   "schema": "agios.metal_master.baselines.v1",
   "source": "policy_seed",
-  "notes": "RX 7900 XTX warn lines are Gary's house policy: 80C core, 88C hotspot. RX 6600 cheap-pass warn lines are fort defaults, 70C core and 80C hotspot, until Gary writes the house numbers.",
+  "notes": "Gary standing caps 2026-11-25. Throne RX 7900 XTX: 86C core, 88C hotspot, 80% load. SelfAware RX 9070: 85C core. Hotspot and load are OPEN. SelfAware GTX 1650: 80C core. Hotspot and load are OPEN. Fuzzy 66 has only the RX 7900 GRE. Its ceiling is OPEN. The older cards were pulled because the PSU cannot run the GRE plus those cards. Throne is not on the planted swarm list.",
   "swarm": [
     "selfaware",
     "fuzzy66"
   ],
   "policy": {
-    "selfaware_rx_7900_xtx": {
-      "core_c": 80,
+    "throne_rx_7900_xtx": {
+      "core_c": 86,
       "hotspot_c": 88,
-      "authority": "gary"
+      "load_pct": 80,
+      "authority": "gary",
+      "standing_caps": "2026-11-25"
     },
-    "fuzzy66_rx_6600_cheap_pass": {
-      "core_c": 70,
-      "hotspot_c": 80,
-      "lane": "cheap_pass",
-      "authority": "fort_default_pending_gary_number"
+    "selfaware_rx_9070": {
+      "core_c": 85,
+      "hotspot_c": null,
+      "load_pct": null,
+      "authority": "gary",
+      "standing_caps": "2026-11-25"
+    },
+    "selfaware_gtx_1650": {
+      "core_c": 80,
+      "hotspot_c": null,
+      "load_pct": null,
+      "authority": "gary",
+      "standing_caps": "2026-11-25"
     }
   },
   "bots": {
@@ -24,13 +34,13 @@
       "host": "selfaware",
       "collector": "thermal",
       "lane": "primary",
-      "gpu": "rx_7900_xtx",
+      "gpu": "rx_9070",
       "metrics": {
         "core_c": {
           "unit": "C",
           "baseline": "both",
           "policy": "ceiling",
-          "warn": 80,
+          "warn": 85,
           "mean": 64.0,
           "stddev": 3.0,
           "n": 0,
@@ -45,8 +55,8 @@
         "hotspot_c": {
           "unit": "C",
           "baseline": "both",
-          "policy": "ceiling",
-          "warn": 88,
+          "policy": "open",
+          "warn": null,
           "mean": 72.0,
           "stddev": 4.0,
           "n": 0,
@@ -63,14 +73,14 @@
     "fuzzy66_thermal": {
       "host": "fuzzy66",
       "collector": "thermal",
-      "lane": "cheap_pass",
-      "gpu": "rx_6600",
+      "lane": null,
+      "gpu": "rx_7900_gre",
       "metrics": {
         "core_c": {
           "unit": "C",
           "baseline": "both",
-          "policy": "ceiling",
-          "warn": 70,
+          "policy": "open",
+          "warn": null,
           "mean": 55.0,
           "stddev": 3.0,
           "n": 0,
@@ -85,8 +95,8 @@
         "hotspot_c": {
           "unit": "C",
           "baseline": "both",
-          "policy": "ceiling",
-          "warn": 80,
+          "policy": "open",
+          "warn": null,
           "mean": 62.0,
           "stddev": 4.0,
           "n": 0,

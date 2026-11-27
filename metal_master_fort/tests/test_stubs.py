@@ -27,10 +27,11 @@ from game_world.world import (
     rotate,
 )
 from house_policy import (
-    FUZZY_CHEAP_PASS_CORE_C,
-    FUZZY_CHEAP_PASS_HOTSPOT_C,
+    CORE_1650_C,
+    CORE_9070_C,
     XTX_CORE_C,
     XTX_HOTSPOT_C,
+    XTX_LOAD_PCT,
 )
 from medic_bot.__main__ import main as medic_main
 from medic_bot.triage import apply_proposal, incident_from_ticket, triage
@@ -166,10 +167,11 @@ def test_roster_leaves_names_blank_and_rotates_hats():
 
 def test_c_scheduler_gives_game_dev_thermal_slots(tmp_path):
     source = (ROOT / "game_world" / "schedule.c").read_text(encoding="utf-8")
-    assert f"#define XTX_CORE_C {XTX_CORE_C}" in source
-    assert f"#define XTX_HOTSPOT_C {XTX_HOTSPOT_C}" in source
-    assert f"#define FUZZY_CORE_C {FUZZY_CHEAP_PASS_CORE_C}" in source
-    assert f"#define FUZZY_HOTSPOT_C {FUZZY_CHEAP_PASS_HOTSPOT_C}" in source
+    assert f"#define THRONE_CORE_C {XTX_CORE_C}" in source
+    assert f"#define THRONE_HOTSPOT_C {XTX_HOTSPOT_C}" in source
+    assert f"#define THRONE_LOAD_PCT {XTX_LOAD_PCT}" in source
+    assert f"#define CORE_9070_C {CORE_9070_C}" in source
+    assert f"#define CORE_1650_C {CORE_1650_C}" in source
     binary = tmp_path / "schedule"
     subprocess.check_call(
         ["gcc", "-std=c11", "-Wall", "-Wextra", "-Werror", "-o", str(binary), str(ROOT / "game_world" / "schedule.c")]
@@ -188,10 +190,10 @@ def test_c_scheduler_gives_game_dev_thermal_slots(tmp_path):
     assert now.returncode == 0, now.stdout
     assert "minutes=40" in now.stdout
     assert "window=thermal_selfaware" in now.stdout
-    assert "note=rx7900xtx_core80_hotspot88" in now.stdout
+    assert "note=rx9070_core85_gtx1650_core80" in now.stdout
     assert "minutes=20" in now.stdout
-    assert "window=cheap_pass" in now.stdout
-    assert "note=rx6600_cheap_pass_core70_hotspot80" in now.stdout
+    assert "window=thermal_fuzzy66" in now.stdout
+    assert "note=rx7900gre_ceiling_open" in now.stdout
     assert "role=mayor" in now.stdout and "minutes=30" in now.stdout
     assert "SUMMARY ok=3 reroute=0" in now.stdout
 
@@ -215,12 +217,18 @@ def test_c_scheduler_gives_game_dev_thermal_slots(tmp_path):
 
     tight = tmp_path / "tight.txt"
     tight.write_text(
-        "thermal selfaware 75 80 primary\nbot bot-07 game_dev rendering selfaware\n",
+        "thermal selfaware rx_9070 75\nbot bot-07 game_dev rendering selfaware\n",
         encoding="utf-8",
     )
     tightened = subprocess.run([str(binary), str(tight)], check=False, capture_output=True, text=True)
     assert tightened.returncode == 0, tightened.stdout
-    assert "note=rx7900xtx_core75_hotspot80" in tightened.stdout
+    assert "note=rx9070_core75_gtx1650_core80" in tightened.stdout
+    gre = tmp_path / "gre.txt"
+    gre.write_text("thermal fuzzy66 rx_7900_gre 60\n", encoding="utf-8")
+    opened = subprocess.run([str(binary), str(gre)], check=False, capture_output=True, text=True)
+    assert opened.returncode == 2
+    assert "ceiling is OPEN" in opened.stdout
+    assert "OK " not in opened.stdout
 
 
 def test_stub_entrypoints_run():

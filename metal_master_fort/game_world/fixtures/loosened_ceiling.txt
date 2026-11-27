@@ -1,1 +1,1 @@
-thermal selfaware 90 88 primary
+thermal selfaware rx_9070 90

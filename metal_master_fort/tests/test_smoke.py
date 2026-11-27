@@ -22,7 +22,7 @@ from game_world.world import (
     make_roster,
     pick_name,
 )
-from house_policy import OBSERVED_HARDWARE, SWARM
+from house_policy import AUTHORITY_GARY, GARY_CAPS, STANDING_CAPS, SWARM
 from medic_bot.triage import RenameLedger, triage, triage_log
 from parameter_masks.guard import commit_mask
 from parameter_masks.loader import apply_mask, load_brain, load_mask
@@ -181,20 +181,32 @@ def test_smoke_scheduler_assigns_minutes_to_blank_seats_without_names(tmp_path):
 def test_smoke_readme_hardware_table_matches_the_owner():
     text = (ROOT / "README.md").read_text(encoding="utf-8")
     assert "| Throne | RX 7900 XTX |" in text
-    assert "RX 9070" in text
-    assert "GTX 1650" in text
-    assert "RX 7900 GRE" in text
+    assert "86 C core / 88 C hotspot / 80% load" in text
+    assert "85 C core" in text
+    assert "80 C core" in text
+    assert "RX 7900 GRE only" in text
     assert "loosens" in text
     assert "tighter" in text
     assert "| selfaware | RX 7900 XTX |" not in text
-    by_gpu = {(row["machine"], row["gpu"]): row for row in OBSERVED_HARDWARE}
+    assert "older cards the owner did not name" not in text
+    by_gpu = {(row["machine"], row["gpu"]): row for row in GARY_CAPS}
     throne = by_gpu[("throne", "rx_7900_xtx")]
-    assert throne["observed_core_c"] == 86
-    assert throne["observed_hotspot_c"] == 88
-    assert throne["observed_load_pct"] == 80
-    assert by_gpu[("selfaware", "rx_9070")]["observed_core_c"] == 85
-    assert by_gpu[("selfaware", "gtx_1650")]["observed_core_c"] == 80
-    assert by_gpu[("fuzzy66", "rx_7900_gre")]["also"] == "older cards"
-    assert by_gpu[("fuzzy66", "rx_7900_gre")]["observed_core_c"] is None
-    assert all(row["ceiling"] is None for row in OBSERVED_HARDWARE)
+    assert throne["core_c"] == 86
+    assert throne["hotspot_c"] == 88
+    assert throne["load_pct"] == 80
+    assert throne["authority"] == AUTHORITY_GARY
+    assert throne["standing_caps"] == STANDING_CAPS
+    card_9070 = by_gpu[("selfaware", "rx_9070")]
+    assert card_9070["core_c"] == 85
+    assert card_9070["hotspot_c"] is None
+    assert card_9070["load_pct"] is None
+    card_1650 = by_gpu[("selfaware", "gtx_1650")]
+    assert card_1650["core_c"] == 80
+    assert card_1650["hotspot_c"] is None
+    assert card_1650["load_pct"] is None
+    gre = by_gpu[("fuzzy66", "rx_7900_gre")]
+    assert gre["core_c"] is None
+    assert gre["hotspot_c"] is None
+    assert gre["load_pct"] is None
+    assert "also" not in gre
     assert "throne" not in SWARM

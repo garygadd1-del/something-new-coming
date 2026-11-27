@@ -1,14 +1,10 @@
 """House thermal policy for the Metal Master Fort.
 
-The planted swarm list is SelfAware and Fuzzy 66 only. Throne is in the
-hardware inventory below and is not on that list until the owner says so.
+Gary's standing caps are dated 2026-11-25. A tighter ceiling is allowed.
+A looser ceiling is refused. A None ceiling is OPEN: do not invent a number.
 
-The constants further down are the anomaly harness seed. That seed still
-labels a selfaware RX 7900 XTX line at 80C core / 88C hotspot, and a fuzzy66
-RX 6600 cheap-pass line at 70C core / 80C hotspot. OBSERVED_HARDWARE is the
-corrected inventory. Ceilings there are OPEN until the owner sets them.
-
-A tighter ceiling than a planted number is allowed. A looser one is refused.
+The planted swarm list is SelfAware and Fuzzy 66 only. Throne holds the
+RX 7900 XTX and is not on that list until the owner says so.
 """
 
 from __future__ import annotations
@@ -17,61 +13,102 @@ SELF_AWARE = "selfaware"
 FUZZY66 = "fuzzy66"
 SWARM = (SELF_AWARE, FUZZY66)
 
-XTX_GPU = "rx_7900_xtx"
-XTX_LANE = "primary"
-XTX_CORE_C = 80
-XTX_HOTSPOT_C = 88
+THRONE = "throne"
+STANDING_CAPS = "2026-11-25"
+AUTHORITY_GARY = "gary"
 
-FUZZY_GPU = "rx_6600"
-FUZZY_LANE = "cheap_pass"
-FUZZY_CHEAP_PASS_CORE_C = 70
-FUZZY_CHEAP_PASS_HOTSPOT_C = 80
+XTX_GPU = "rx_7900_xtx"
+XTX_CORE_C = 86
+XTX_HOTSPOT_C = 88
+XTX_LOAD_PCT = 80
+
+GPU_9070 = "rx_9070"
+CORE_9070_C = 85
+
+GPU_1650 = "gtx_1650"
+CORE_1650_C = 80
+
+GRE_GPU = "rx_7900_gre"
 
 STRIKE_LIMIT = 3
 
-# Observed hardware. These are not ceilings and they do not replace the seed.
-# A ceiling the owner has not set stays None (OPEN). Do not invent one.
-OBSERVED_HARDWARE = (
+# Standing caps. Fuzzy 66's GRE ceiling stays None (OPEN).
+# The older cards were pulled: the PSU cannot run the GRE plus those cards.
+GARY_CAPS = (
     {
-        "machine": "throne",
-        "gpu": "rx_7900_xtx",
-        "observed_core_c": 86,
-        "observed_hotspot_c": 88,
-        "observed_load_pct": 80,
-        "ceiling": None,
+        "machine": THRONE,
+        "gpu": XTX_GPU,
+        "core_c": XTX_CORE_C,
+        "hotspot_c": XTX_HOTSPOT_C,
+        "load_pct": XTX_LOAD_PCT,
+        "authority": AUTHORITY_GARY,
+        "standing_caps": STANDING_CAPS,
     },
     {
-        "machine": "selfaware",
-        "gpu": "rx_9070",
-        "observed_core_c": 85,
-        "observed_hotspot_c": None,
-        "observed_load_pct": None,
-        "ceiling": None,
+        "machine": SELF_AWARE,
+        "gpu": GPU_9070,
+        "core_c": CORE_9070_C,
+        "hotspot_c": None,
+        "load_pct": None,
+        "authority": AUTHORITY_GARY,
+        "standing_caps": STANDING_CAPS,
     },
     {
-        "machine": "selfaware",
-        "gpu": "gtx_1650",
-        "observed_core_c": 80,
-        "observed_hotspot_c": None,
-        "observed_load_pct": None,
-        "ceiling": None,
+        "machine": SELF_AWARE,
+        "gpu": GPU_1650,
+        "core_c": CORE_1650_C,
+        "hotspot_c": None,
+        "load_pct": None,
+        "authority": AUTHORITY_GARY,
+        "standing_caps": STANDING_CAPS,
     },
     {
-        "machine": "fuzzy66",
-        "gpu": "rx_7900_gre",
-        "also": "older cards",
-        "observed_core_c": None,
-        "observed_hotspot_c": None,
-        "observed_load_pct": None,
-        "ceiling": None,
+        "machine": FUZZY66,
+        "gpu": GRE_GPU,
+        "core_c": None,
+        "hotspot_c": None,
+        "load_pct": None,
+        "authority": None,
+        "standing_caps": None,
     },
 )
 
 POLICY_NOTE = (
-    "RX 7900 XTX warn lines are Gary's house policy: 80C core, 88C hotspot. "
-    "RX 6600 cheap-pass warn lines are fort defaults, 70C core and 80C hotspot, "
-    "until Gary writes the house numbers."
+    "Gary standing caps 2026-11-25. "
+    "Throne RX 7900 XTX: 86C core, 88C hotspot, 80% load. "
+    "SelfAware RX 9070: 85C core. Hotspot and load are OPEN. "
+    "SelfAware GTX 1650: 80C core. Hotspot and load are OPEN. "
+    "Fuzzy 66 has only the RX 7900 GRE. Its ceiling is OPEN. "
+    "The older cards were pulled because the PSU cannot run the GRE plus those cards. "
+    "Throne is not on the planted swarm list."
 )
+
+
+def standing_policy() -> dict:
+    """The harness policy seed. The GRE is absent because its ceiling is OPEN."""
+    return {
+        "throne_rx_7900_xtx": {
+            "core_c": XTX_CORE_C,
+            "hotspot_c": XTX_HOTSPOT_C,
+            "load_pct": XTX_LOAD_PCT,
+            "authority": AUTHORITY_GARY,
+            "standing_caps": STANDING_CAPS,
+        },
+        "selfaware_rx_9070": {
+            "core_c": CORE_9070_C,
+            "hotspot_c": None,
+            "load_pct": None,
+            "authority": AUTHORITY_GARY,
+            "standing_caps": STANDING_CAPS,
+        },
+        "selfaware_gtx_1650": {
+            "core_c": CORE_1650_C,
+            "hotspot_c": None,
+            "load_pct": None,
+            "authority": AUTHORITY_GARY,
+            "standing_caps": STANDING_CAPS,
+        },
+    }
 
 
 class PolicyError(ValueError):

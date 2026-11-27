@@ -3,7 +3,7 @@
   "role": "mayor",
   "title": "Mayor",
   "emergent": false,
-  "notes": "Full civic stack: governance, diplomacy, and resource allocation, plus speech and memory. Combat and threat are stripped. A job can upgrade resource allocation; it cannot put a stripped parameter back. The hold_thermal_budget numbers are the planted harness seed (80/88 and 70/80), not a ceiling for Throne, the RX 9070, the GTX 1650, or the RX 7900 GRE. Those ceilings are OPEN.",
+  "notes": "Full civic stack: governance, diplomacy, and resource allocation, plus speech and memory. Combat and threat are stripped. A job can upgrade resource allocation; it cannot put a stripped parameter back. hold_thermal_budget records Gary's standing caps from 2026-11-25. Throne RX 7900 XTX is 86C core, 88C hotspot, 80% load. SelfAware RX 9070 is 85C core. SelfAware GTX 1650 is 80C core. Hotspot and load on those two cards are OPEN. The RX 7900 GRE ceiling is OPEN and is not in this upgrade.",
   "keep": ["governance", "diplomacy", "resource_allocation", "speech", "memory"],
   "strip": ["combat", "threat", "triage", "catalog", "craft"],
   "jobs": ["hold_court", "allocate_resources", "hold_thermal_budget", "name_shifts"],
@@ -17,11 +17,22 @@
       "upgrade": {
         "resource_allocation": {
           "thermal_policy": {
-            "selfaware_rx_7900_xtx": {"core_c": 80, "hotspot_c": 88},
-            "fuzzy66_rx_6600_cheap_pass": {
-              "core_c": 70,
-              "hotspot_c": 80,
-              "lane": "cheap_pass"
+            "throne_rx_7900_xtx": {
+              "core_c": 86,
+              "hotspot_c": 88,
+              "load_pct": 80,
+              "authority": "gary",
+              "standing_caps": "2026-11-25"
+            },
+            "selfaware_rx_9070": {
+              "core_c": 85,
+              "authority": "gary",
+              "standing_caps": "2026-11-25"
+            },
+            "selfaware_gtx_1650": {
+              "core_c": 80,
+              "authority": "gary",
+              "standing_caps": "2026-11-25"
             }
           }
         }

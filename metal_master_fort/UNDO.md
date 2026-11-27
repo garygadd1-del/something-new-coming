@@ -4,7 +4,7 @@ This scaffold does not install a service, a cron job, a credential, or a copy on
 
 ## This increment
 
-Branch `cursor/fort-working-modules-8ca1` turns the five local modules on (masks, `mask_guard` coverage of those masks, medic, morning digest, C scheduler) and corrects the hardware table in `README.md`. It does not change `anomaly_harness/` or `tests/test_anomaly_harness.py`. It does not install a service, open a socket, or copy files onto a machine.
+Branch `cursor/fort-working-modules-8ca1` turns the five local modules on (masks, `mask_guard` coverage of those masks, medic, morning digest, C scheduler), records Gary's standing caps from 2026-11-25, and re-plants the harness policy seed as `throne_rx_7900_xtx`. It does not install a service, open a socket, or copy files onto a machine.
 
 To undo only this increment:
 

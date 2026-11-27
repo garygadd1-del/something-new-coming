@@ -29,20 +29,16 @@ from anomaly_harness.collectors import COLLECTORS
 from anomaly_harness.drift import apply_streak, judge, pullback
 from anomaly_harness.errors import HarnessError
 from house_policy import (
+    CORE_9070_C,
     FUZZY66,
-    FUZZY_CHEAP_PASS_CORE_C,
-    FUZZY_CHEAP_PASS_HOTSPOT_C,
-    FUZZY_GPU,
-    FUZZY_LANE,
+    GPU_9070,
+    GRE_GPU,
     POLICY_NOTE,
     PolicyError,
     SELF_AWARE,
     SWARM,
-    XTX_CORE_C,
-    XTX_GPU,
-    XTX_HOTSPOT_C,
-    XTX_LANE,
     assert_swarm,
+    standing_policy,
 )
 
 CONFIG_SCHEMA = "agios.metal_master.harness_config.v1"
@@ -228,30 +224,32 @@ def _validate_bot(name: str, bot: dict) -> None:
                 raise HarnessError(f"{name}.{metric_name}: missing {key}")
         if metric["baseline"] not in ("high", "low", "both"):
             raise HarnessError(f"{name}.{metric_name}: baseline side is invalid")
-        if metric["policy"] not in ("ceiling", "floor"):
+        if metric["policy"] not in ("ceiling", "floor", "open"):
             raise HarnessError(f"{name}.{metric_name}: policy side is invalid")
         if int(metric["strike_limit"]) < 1:
             raise HarnessError(f"{name}.{metric_name}: strike_limit must be at least 1")
 
 
+def _open_ceiling(metric: dict) -> bool:
+    return metric.get("policy") == "open" and metric.get("warn") is None
+
+
 def _validate_known_ceilings(bots: dict) -> None:
     thermal = bots["thermal_gate"]
-    if thermal["host"] != SELF_AWARE or thermal["gpu"] != XTX_GPU or thermal["lane"] != XTX_LANE:
-        raise HarnessError("thermal_gate must be the selfaware RX 7900 XTX primary lane")
+    if thermal["host"] != SELF_AWARE or thermal["gpu"] != GPU_9070 or thermal.get("lane") != "primary":
+        raise HarnessError("thermal_gate must be the selfaware RX 9070 primary lane")
     if thermal["collector"] != "thermal":
         raise HarnessError("thermal_gate collector must be thermal")
-    if int(thermal["metrics"]["core_c"]["warn"]) != XTX_CORE_C:
-        raise HarnessError("thermal_gate core warn must stay on Gary's 80C line")
-    if int(thermal["metrics"]["hotspot_c"]["warn"]) != XTX_HOTSPOT_C:
-        raise HarnessError("thermal_gate hotspot warn must stay on Gary's 88C line")
+    if int(thermal["metrics"]["core_c"]["warn"]) != CORE_9070_C:
+        raise HarnessError("thermal_gate core warn must stay on Gary's 85C line")
+    if not _open_ceiling(thermal["metrics"]["hotspot_c"]):
+        raise HarnessError("thermal_gate hotspot is OPEN on the RX 9070")
 
     fuzzy = bots["fuzzy66_thermal"]
-    if fuzzy["host"] != FUZZY66 or fuzzy["gpu"] != FUZZY_GPU or fuzzy["lane"] != FUZZY_LANE:
-        raise HarnessError("fuzzy66_thermal must be the RX 6600 cheap-pass lane")
-    if int(fuzzy["metrics"]["core_c"]["warn"]) != FUZZY_CHEAP_PASS_CORE_C:
-        raise HarnessError("fuzzy66 core warn must stay on the fort cheap-pass default")
-    if int(fuzzy["metrics"]["hotspot_c"]["warn"]) != FUZZY_CHEAP_PASS_HOTSPOT_C:
-        raise HarnessError("fuzzy66 hotspot warn must stay on the fort cheap-pass default")
+    if fuzzy["host"] != FUZZY66 or fuzzy["gpu"] != GRE_GPU or fuzzy.get("lane") is not None:
+        raise HarnessError("fuzzy66_thermal must be the RX 7900 GRE")
+    if not _open_ceiling(fuzzy["metrics"]["core_c"]) or not _open_ceiling(fuzzy["metrics"]["hotspot_c"]):
+        raise HarnessError("fuzzy66 RX 7900 GRE ceiling is OPEN")
 
     if "core_c" not in thermal["metrics"] or "hotspot_c" not in thermal["metrics"]:
         raise HarnessError("thermal metrics must include core_c and hotspot_c")
@@ -307,19 +305,7 @@ def build_baselines(config: dict, samples: list[dict] | None) -> dict:
         "source": "samples" if samples is not None else "policy_seed",
         "notes": POLICY_NOTE,
         "swarm": list(SWARM),
-        "policy": {
-            "selfaware_rx_7900_xtx": {
-                "core_c": XTX_CORE_C,
-                "hotspot_c": XTX_HOTSPOT_C,
-                "authority": "gary",
-            },
-            "fuzzy66_rx_6600_cheap_pass": {
-                "core_c": FUZZY_CHEAP_PASS_CORE_C,
-                "hotspot_c": FUZZY_CHEAP_PASS_HOTSPOT_C,
-                "lane": FUZZY_LANE,
-                "authority": "fort_default_pending_gary_number",
-            },
-        },
+        "policy": standing_policy(),
         "bots": bots_out,
     }
 
@@ -433,19 +419,26 @@ def _any_open_below_strike(open_rows: list[dict]) -> bool:
 
 def render_report(payload: dict) -> str:
     policy = payload["policy"]
-    xtx = policy["selfaware_rx_7900_xtx"]
-    fuzzy = policy["fuzzy66_rx_6600_cheap_pass"]
+    throne = policy["throne_rx_7900_xtx"]
+    card_9070 = policy["selfaware_rx_9070"]
+    card_1650 = policy["selfaware_gtx_1650"]
     lines = [
         "Metal Master Fort — anomaly harness",
         "swarm: " + ", ".join(payload["swarm"]),
         (
-            "Gary policy: selfaware RX 7900 XTX "
-            f"core {xtx['core_c']}C / hotspot {xtx['hotspot_c']}C"
+            "Gary standing caps 2026-11-25: Throne RX 7900 XTX "
+            f"core {throne['core_c']}C / hotspot {throne['hotspot_c']}C / "
+            f"load {throne['load_pct']}%"
         ),
         (
-            "Fort default (pending Gary's number): fuzzy66 RX 6600 cheap-pass "
-            f"core {fuzzy['core_c']}C / hotspot {fuzzy['hotspot_c']}C"
+            "Gary standing caps 2026-11-25: SelfAware RX 9070 "
+            f"core {card_9070['core_c']}C. Hotspot and load are OPEN."
         ),
+        (
+            "Gary standing caps 2026-11-25: SelfAware GTX 1650 "
+            f"core {card_1650['core_c']}C. Hotspot and load are OPEN."
+        ),
+        "Fuzzy 66 RX 7900 GRE ceiling is OPEN.",
         f"baseline source: {payload['source']}",
         (
             "counts: "

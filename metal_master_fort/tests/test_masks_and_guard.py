@@ -6,11 +6,14 @@ from pathlib import Path
 import pytest
 
 from house_policy import (
-    FUZZY_CHEAP_PASS_CORE_C,
-    FUZZY_CHEAP_PASS_HOTSPOT_C,
+    AUTHORITY_GARY,
+    CORE_1650_C,
+    CORE_9070_C,
+    STANDING_CAPS,
     SWARM,
     XTX_CORE_C,
     XTX_HOTSPOT_C,
+    XTX_LOAD_PCT,
 )
 from parameter_masks.guard import Reroute, commit_mask
 from parameter_masks.loader import MaskError, apply_mask, load_brain, load_mask
@@ -44,11 +47,20 @@ def test_mayor_is_the_civic_stack_and_the_thermal_job_upgrades_it():
 
     budget = apply_mask(brain, load_mask("mayor"), job="hold_thermal_budget")
     policy = budget["parameters"]["resource_allocation"]["thermal_policy"]
-    assert policy["selfaware_rx_7900_xtx"] == {"core_c": XTX_CORE_C, "hotspot_c": XTX_HOTSPOT_C}
-    cheap = policy["fuzzy66_rx_6600_cheap_pass"]
-    assert cheap["core_c"] == FUZZY_CHEAP_PASS_CORE_C
-    assert cheap["hotspot_c"] == FUZZY_CHEAP_PASS_HOTSPOT_C
-    assert cheap["lane"] == "cheap_pass"
+    assert policy["throne_rx_7900_xtx"] == {
+        "core_c": XTX_CORE_C,
+        "hotspot_c": XTX_HOTSPOT_C,
+        "load_pct": XTX_LOAD_PCT,
+        "authority": AUTHORITY_GARY,
+        "standing_caps": STANDING_CAPS,
+    }
+    assert policy["selfaware_rx_9070"]["core_c"] == CORE_9070_C
+    assert "hotspot_c" not in policy["selfaware_rx_9070"]
+    assert "load_pct" not in policy["selfaware_rx_9070"]
+    assert policy["selfaware_gtx_1650"]["core_c"] == CORE_1650_C
+    assert "hotspot_c" not in policy["selfaware_gtx_1650"]
+    assert "fuzzy66_rx_6600_cheap_pass" not in policy
+    assert "fuzzy66_rx_7900_gre" not in policy
 
 
 def test_warrior_is_combat_and_threat_with_the_rest_stripped():
@@ -123,14 +135,14 @@ def test_wrapper_accepts_every_produced_mask_and_reroutes_sideways(tmp_path, mas
         commit_mask(librarian, tmp_path / "librarian-combat.json", mask_guard)
 
     loosened = apply_mask(brain, load_mask("mayor"), job="hold_thermal_budget")
-    loosened["parameters"]["resource_allocation"]["thermal_policy"]["selfaware_rx_7900_xtx"][
+    loosened["parameters"]["resource_allocation"]["thermal_policy"]["throne_rx_7900_xtx"][
         "core_c"
     ] = 90
     with pytest.raises(Reroute, match="loosen"):
         commit_mask(loosened, tmp_path / "loosened.json", mask_guard)
 
     tightened = apply_mask(brain, load_mask("mayor"), job="hold_thermal_budget")
-    tightened["parameters"]["resource_allocation"]["thermal_policy"]["selfaware_rx_7900_xtx"][
+    tightened["parameters"]["resource_allocation"]["thermal_policy"]["throne_rx_7900_xtx"][
         "core_c"
     ] = 75
     commit_mask(tightened, tmp_path / "tightened.json", mask_guard)

@@ -1,6 +1,6 @@
 # Metal Master Fort
 
-AGIOS scaffold. The anomaly harness is live and unchanged. The other five components are local modules with schemas and tests. Nothing in this tree is a service, a deploy, or a copy onto a machine.
+AGIOS scaffold. The anomaly harness is live. The other five components are local modules with schemas and tests. Nothing in this tree is a service, a deploy, or a copy onto a machine.
 
 Live home, when a human puts it there:
 
@@ -14,35 +14,36 @@ That path is on selfaware. This repo does not copy itself there, and it does not
 
 ### Hardware inventory
 
-Owner-stated machines. A blank ceiling is **OPEN**: this tree does not invent one.
+Gary's standing caps, dated 2026-11-25. A blank ceiling is **OPEN**: this tree does not invent one.
 
-| Machine | GPU | Observed | Ceiling |
+| Machine | GPU | Ceiling | Authority |
 | --- | --- | --- | --- |
-| Throne | RX 7900 XTX | 86 C core / 88 C hotspot / 80% load | OPEN |
-| SelfAware | RX 9070 | 85 C core. Hotspot and load were not given. | OPEN |
-| SelfAware | GTX 1650 | 80 C core. Hotspot and load were not given. | OPEN |
-| Fuzzy 66 | RX 7900 GRE, plus older cards the owner did not name | Temps were not given. | OPEN |
+| Throne | RX 7900 XTX | 86 C core / 88 C hotspot / 80% load | gary, 2026-11-25 |
+| SelfAware | RX 9070 | 85 C core. Hotspot OPEN. Load OPEN. | gary, 2026-11-25 |
+| SelfAware | GTX 1650 | 80 C core. Hotspot OPEN. Load OPEN. | gary, 2026-11-25 |
+| Fuzzy 66 | RX 7900 GRE only | OPEN | OPEN |
 
-A config that loosens a ceiling is refused. A tighter ceiling is allowed. An OPEN ceiling is not a number, so these modules do not enforce a new limit for that card.
+Fuzzy 66 has only the RX 7900 GRE. The older cards were pulled because the PSU cannot run the GRE plus those cards.
 
-Throne is in this inventory. The planted swarm list used by the harness, the masks, and the scheduler is still `selfaware` and `fuzzy66`. Whether Throne joins that list is OPEN.
+A config that loosens a ceiling is refused. A tighter ceiling is allowed. An OPEN ceiling is not a number, so these modules do not enforce a limit for that card.
 
-### Planted harness seed
+The planted swarm list used by the harness, the masks, and the scheduler is still `selfaware` and `fuzzy66`. Throne is named on the XTX cap and is not on that list. Whether Throne joins the list is OPEN.
 
-The live anomaly harness is unchanged. Its policy seed still reads:
+### Harness policy seed
 
-| Seed key | Numbers | Authority recorded on the seed |
+| Seed key | Numbers | Authority |
 | --- | --- | --- |
-| `selfaware_rx_7900_xtx` | 80 C core / 88 C hotspot | gary |
-| `fuzzy66_rx_6600_cheap_pass` | 70 C core / 80 C hotspot | fort default until Gary writes it |
+| `throne_rx_7900_xtx` | 86 C core / 88 C hotspot / 80% load | gary, 2026-11-25 |
+| `selfaware_rx_9070` | 85 C core. Hotspot and load OPEN. | gary, 2026-11-25 |
+| `selfaware_gtx_1650` | 80 C core. Hotspot and load OPEN. | gary, 2026-11-25 |
 
-Those labels do not match the hardware inventory above. Re-planting the seed is OPEN. Until the owner says the post moved, the masks and the scheduler keep enforcing this planted pair: tighter than the seed is allowed, looser than the seed is refused.
+`thermal_gate` watches the SelfAware RX 9070 at 85 C core. Its hotspot ceiling is OPEN. The GRE has no warn number. The masks and the scheduler enforce the same three caps.
 
 ## What is live
 
 | # | Piece | State |
 | --- | --- | --- |
-| 1 | Anomaly harness | Live, unchanged. `baseline-init`, `collect`, `check`, `report`. Thermal, trader, and network read local fixtures. |
+| 1 | Anomaly harness | Live. `baseline-init`, `collect`, `check`, `report`. Thermal, trader, and network read local fixtures. The policy seed names the Throne RX 7900 XTX. |
 | 2 | Parameter masks | Runs. One brain, four masks, job upgrades. |
 | 3 | Rust wrapper | Runs. `mask_guard` validates a masked brain, including the four masks, and reroutes when one is sideways. The other languages are seats in `rust_wrappers/LANGUAGES.md`. |
 | 4 | Medic bot | Runs. Classifies a crash, a config typo, or a real bug from a report or a local log. Rename proposals stay in memory. |
@@ -76,12 +77,12 @@ Runtime logs land in `anomaly_harness/events/` and are gitignored. The committed
 
 One brain in `parameter_masks/brain.json`. A mask strips parameters and may upgrade the ones it kept.
 
-- **Mayor** keeps the civic stack: governance, diplomacy, resource allocation, plus speech and memory. Combat and threat are stripped. The `hold_thermal_budget` job upgrades resource allocation with the planted seed above, not with a new hardware ceiling.
+- **Mayor** keeps the civic stack: governance, diplomacy, resource allocation, plus speech and memory. Combat and threat are stripped. The `hold_thermal_budget` job upgrades resource allocation with Gary's standing caps above. The GRE ceiling is not in that upgrade.
 - **Warrior** is stripped down to combat and threat. Doctrine stays `defense_only`.
 - **Medic** keeps triage and memory. `patch_typo` records what that job is allowed to close.
 - **Librarian** is the little mask: catalog and memory. `emergent` is true. Behavior past shelve, recall, and lend stays inside those two parameters. A stripped parameter that appears mid-task is sideways.
 
-`commit_mask` writes the masked brain and runs `mask_guard`. Invalid JSON, a raid doctrine, a leader voice other than `when_called`, a stripped parameter on one of the four masks, a thermal number above the planted seed, or a missing binary raises `Reroute`. The task stops.
+`commit_mask` writes the masked brain and runs `mask_guard`. Invalid JSON, a raid doctrine, a leader voice other than `when_called`, a stripped parameter on one of the four masks, a thermal number above a standing cap, or a missing binary raises `Reroute`. The task stops.
 
 Build the wrapper (no crate dependencies):
 
@@ -110,7 +111,7 @@ gcc -std=c11 -Wall -Wextra -Werror -o /tmp/mmf-schedule game_world/schedule.c
 /tmp/mmf-schedule game_world/fixtures/rendering_now.txt
 ```
 
-A `rendering` goal gives `game_dev` 40 minutes on selfaware (inside the planted 80/88 seed) or 20 minutes on fuzzy66 (cheap-pass 70/80 seed). Another role asking for rendering is rerouted. A thermal line that loosens a planted ceiling is rerouted and does not change the number. A tighter line is kept.
+A `rendering` goal gives `game_dev` 40 minutes on selfaware (inside the 9070 and 1650 core caps) or 20 minutes on fuzzy66 (GRE ceiling OPEN). Another role asking for rendering is rerouted. A thermal line that loosens a standing cap is rerouted and does not change the number. A tighter line is kept. A fuzzy66 thermal line is refused.
 
 A `seat` line assigns minutes to a blank job id (`blank.001` and the rest). The line has no name field. An extra token is refused, and the seat stays unnamed. The minute cap in `schedule.c` (`BLANK_MINUTES_CAP`, 45) is an EXAMPLE until the owner sets a blank-seat budget.
 

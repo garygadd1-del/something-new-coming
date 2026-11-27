@@ -1,7 +1,7 @@
 {
   "bot": "fuzzy66_thermal",
   "lane": "thermal",
-  "goal_hit": "EXAMPLE. The planted cheap-pass seed is still the RX 6600 line. The hardware inventory says RX 7900 GRE plus older cards.",
-  "problem_solved": "No planted cheap-pass ceiling cross in this fixture.",
-  "thing_improved": "Left the GRE ceiling OPEN."
+  "goal_hit": "Fuzzy 66 has only the RX 7900 GRE. Its ceiling stays OPEN.",
+  "problem_solved": "No GRE ceiling was invented for this fixture.",
+  "thing_improved": "The older cards stay pulled. The PSU cannot run them with the GRE."
 }

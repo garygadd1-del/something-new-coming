@@ -44,7 +44,7 @@ Box: invariants and tests. A ceiling is either held or it is not. This is the se
 
 Game: the measuring rod, and the oath before the gate opens. No oath, no entry.
 
-Third world: the marks cut into the gatepost. One mark is the planted harness seed (80C / 88C, still labeled selfaware RX 7900 XTX, and the RX 6600 cheap-pass numbers). The hardware table in README.md says the RX 7900 XTX is on Throne. That ceiling, and the ceilings for the RX 9070, the GTX 1650, and the RX 7900 GRE, are OPEN until the owner cuts them.
+Third world: the marks cut into the gatepost. Gary's standing caps from 2026-11-25 are cut there: Throne's RX 7900 XTX at 86C core / 88C hotspot / 80% load, the SelfAware RX 9070 at 85C core, and the SelfAware GTX 1650 at 80C core. Hotspot and load on those two SelfAware cards are OPEN. The RX 7900 GRE ceiling is OPEN.
 
 ## Sanskrit — emergency only
 
