@@ -1,1 +1,1 @@
-"""One shared brain, a mask per role."""
+"""One shared brain, four masks, and a job upgrade on the parameters a mask kept."""

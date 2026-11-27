@@ -13,7 +13,9 @@ def main(argv: list[str] | None = None) -> int:
     jobs = expand_jobs(spec)
     roster = make_roster(spec)
     blanks = sum(1 for job in jobs if job["blank"])
+    named = sum(1 for bot in roster if bot["real_name"] or bot["street_name"])
     print(f"jobs={len(jobs)} blanks={blanks} bots={len(roster)} max_hats={spec['max_hats']}")
+    print(f"names_filled={named}")
     print("scheduler: game_world/schedule.c")
     return 0
 

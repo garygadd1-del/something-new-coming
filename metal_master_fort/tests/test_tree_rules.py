@@ -22,6 +22,42 @@ def test_swarm_names_are_not_joined_by_anything_else():
     assert "SWARM = (SELF_AWARE, FUZZY66)" in text
 
 
+def test_local_modules_do_not_import_a_client():
+    for relative in (
+        "parameter_masks/loader.py",
+        "parameter_masks/guard.py",
+        "medic_bot/triage.py",
+        "daily_standup/digest.py",
+        "game_world/world.py",
+        "game_world/schedule.c",
+        "house_policy.py",
+    ):
+        text = (ROOT / relative).read_text(encoding="utf-8")
+        assert "import socket" not in text
+        assert "urllib" not in text
+        assert "requests" not in text
+
+
+def test_tree_does_not_name_a_model_runtime():
+    banned = (
+        "".join(("oll", "ama")),
+        "".join(("lla", "ma.cpp")),
+        "".join(("lla", "macpp")),
+    )
+    offenders = []
+    for path in ROOT.rglob("*"):
+        if not path.is_file() or any(part in SKIP for part in path.parts):
+            continue
+        try:
+            text = path.read_text(encoding="utf-8").casefold()
+        except (UnicodeDecodeError, OSError):
+            continue
+        for needle in banned:
+            if needle in text:
+                offenders.append(f"{path.relative_to(ROOT)} names {needle}")
+    assert offenders == []
+
+
 def test_collectors_do_not_import_a_client():
     for relative in (
         "anomaly_harness/collectors/thermal.py",

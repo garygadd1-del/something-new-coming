@@ -2,6 +2,17 @@
 
 This scaffold does not install a service, a cron job, a credential, or a copy on selfaware. It does not change the Kalwi seats. It does not open a socket.
 
+## This increment
+
+Branch `cursor/fort-working-modules-8ca1` turns the five local modules on (masks, `mask_guard` coverage of those masks, medic, morning digest, C scheduler) and corrects the hardware table in `README.md`. It does not change `anomaly_harness/` or `tests/test_anomaly_harness.py`. It does not install a service, open a socket, or copy files onto a machine.
+
+To undo only this increment:
+
+1. Close its pull request without merging.
+2. Delete the branch `cursor/fort-working-modules-8ca1`.
+
+The scaffold removal steps below still apply to the whole tree.
+
 To remove it:
 
 1. Close the draft pull request without merging.

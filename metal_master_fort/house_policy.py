@@ -1,10 +1,14 @@
 """House thermal policy for the Metal Master Fort.
 
-The swarm is SelfAware and Fuzzy 66 only.
+The planted swarm list is SelfAware and Fuzzy 66 only. Throne is in the
+hardware inventory below and is not on that list until the owner says so.
 
-RX 7900 XTX core 80C / hotspot 88C is Gary's line.
-RX 6600 cheap-pass core 70C / hotspot 80C is a fort default until Gary
-writes that number. Do not treat the fort default as Gary's line.
+The constants further down are the anomaly harness seed. That seed still
+labels a selfaware RX 7900 XTX line at 80C core / 88C hotspot, and a fuzzy66
+RX 6600 cheap-pass line at 70C core / 80C hotspot. OBSERVED_HARDWARE is the
+corrected inventory. Ceilings there are OPEN until the owner sets them.
+
+A tighter ceiling than a planted number is allowed. A looser one is refused.
 """
 
 from __future__ import annotations
@@ -24,6 +28,44 @@ FUZZY_CHEAP_PASS_CORE_C = 70
 FUZZY_CHEAP_PASS_HOTSPOT_C = 80
 
 STRIKE_LIMIT = 3
+
+# Observed hardware. These are not ceilings and they do not replace the seed.
+# A ceiling the owner has not set stays None (OPEN). Do not invent one.
+OBSERVED_HARDWARE = (
+    {
+        "machine": "throne",
+        "gpu": "rx_7900_xtx",
+        "observed_core_c": 86,
+        "observed_hotspot_c": 88,
+        "observed_load_pct": 80,
+        "ceiling": None,
+    },
+    {
+        "machine": "selfaware",
+        "gpu": "rx_9070",
+        "observed_core_c": 85,
+        "observed_hotspot_c": None,
+        "observed_load_pct": None,
+        "ceiling": None,
+    },
+    {
+        "machine": "selfaware",
+        "gpu": "gtx_1650",
+        "observed_core_c": 80,
+        "observed_hotspot_c": None,
+        "observed_load_pct": None,
+        "ceiling": None,
+    },
+    {
+        "machine": "fuzzy66",
+        "gpu": "rx_7900_gre",
+        "also": "older cards",
+        "observed_core_c": None,
+        "observed_hotspot_c": None,
+        "observed_load_pct": None,
+        "ceiling": None,
+    },
+)
 
 POLICY_NOTE = (
     "RX 7900 XTX warn lines are Gary's house policy: 80C core, 88C hotspot. "

@@ -1,4 +1,6 @@
-# rendering now: Game Dev takes thermal-scheduled slots
+# rendering now: game_dev takes thermal-scheduled slots
+# 80/88 and 70/80 are the planted harness seed. Equal to the seed is allowed.
+# Hardware-inventory ceilings are OPEN. See README.md.
 thermal selfaware 80 88 primary
 thermal fuzzy66 70 80 cheap_pass
 bot bot-07 game_dev rendering selfaware

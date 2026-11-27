@@ -1,19 +1,26 @@
 /*
- * Metal Master Fort — scheduling stub.
+ * Metal Master Fort — shift-job scheduler.
  *
  * Minutes depend on role and the bot's current goal. A rendering goal gives
- * game_dev a thermal-scheduled slot. SelfAware stays inside Gary's RX 7900 XTX
- * line (80C core / 88C hotspot). Fuzzy 66 stays on the RX 6600 cheap-pass lane
- * (fort default 70C core / 80C hotspot).
+ * game_dev a thermal-scheduled slot inside the planted harness seed:
+ * selfaware labeled rx7900xtx at 80C core / 88C hotspot, fuzzy66 labeled
+ * rx6600 cheap-pass at 70C core / 80C hotspot. Those labels are the seed.
+ * The hardware inventory is in README.md: Throne has the RX 7900 XTX,
+ * SelfAware has an RX 9070 and a GTX 1650, Fuzzy66 has an RX 7900 GRE plus
+ * older cards. Ceilings for that inventory are OPEN. This file does not
+ * invent them.
  *
- * The swarm is selfaware and fuzzy66 only.
+ * The planted swarm list is selfaware and fuzzy66 only.
  * This program reads a local text file. It does not open a socket.
  *
  *   thermal <host> <core_c> <hotspot_c> <lane>
  *   bot <id> <role> <goal> <host>
+ *   seat <blank-id> <minutes>
  *
- * A thermal line may tighten a ceiling. It may not loosen one.
+ * A thermal line may tighten a planted ceiling. It may not loosen one.
  * A refused thermal line leaves the previous ceiling in place.
+ * A seat line assigns minutes to a blank job id. It has no name field.
+ * BLANK_MINUTES_CAP is an EXAMPLE until the owner sets a blank-seat budget.
  *
  * stdout is OK lines, REROUTE lines, then SUMMARY.
  * exit 0: all OK. exit 2: nothing scheduled, or usage. exit 3: mixed.
@@ -29,6 +36,9 @@
 #define XTX_HOTSPOT_C 88
 #define FUZZY_CORE_C 70
 #define FUZZY_HOTSPOT_C 80
+/* EXAMPLE until the owner sets a blank-seat minute cap.
+   45 is the longest role slot already assigned in this file. */
+#define BLANK_MINUTES_CAP 45
 
 #define MAX_LINE 512
 #define MAX_TOK 8
@@ -230,6 +240,66 @@ static int minutes_for(
     return 15;
 }
 
+static int blank_id(const char *text)
+{
+    size_t index;
+    size_t length;
+
+    if (text == NULL || strncmp(text, "blank.", 6) != 0) {
+        return 0;
+    }
+    length = strlen(text);
+    if (length < 7 || length > 9) {
+        return 0;
+    }
+    for (index = 6; index < length; index++) {
+        if (!isdigit((unsigned char)text[index])) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+static int parse_minutes(const char *text, int *out)
+{
+    char *end = NULL;
+    long value;
+
+    if (text == NULL || !isdigit((unsigned char)text[0])) {
+        return -1;
+    }
+    errno = 0;
+    value = strtol(text, &end, 10);
+    if (errno != 0 || end == text || *end != '\0') {
+        return -1;
+    }
+    if (value < 1 || value > BLANK_MINUTES_CAP) {
+        return -1;
+    }
+    *out = (int)value;
+    return 0;
+}
+
+static void apply_seat(char **tok, int count)
+{
+    int minutes = 0;
+
+    if (count > 3) {
+        reroute("blank seat names stay blank");
+        return;
+    }
+    if (count != 3 || !blank_id(tok[1])) {
+        reroute("blank seat line refused");
+        return;
+    }
+    if (parse_minutes(tok[2], &minutes) != 0) {
+        reroute("blank seat minutes refused");
+        return;
+    }
+    printf("OK seat=%s minutes=%d name=\n", tok[1], minutes);
+    g_ok++;
+}
+
 static void apply_thermal(char **tok, int count)
 {
     int core = 0;
@@ -316,6 +386,10 @@ static void handle_line(char *line)
     }
     if (strcmp(tok[0], "bot") == 0) {
         apply_bot(tok, count);
+        return;
+    }
+    if (strcmp(tok[0], "seat") == 0) {
+        apply_seat(tok, count);
         return;
     }
     reroute("unknown command");

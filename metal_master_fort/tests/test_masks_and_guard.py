@@ -1,7 +1,6 @@
 """Parameter masks, and the Rust wrapper that reroutes a sideways mask."""
 
 import json
-import subprocess
 from pathlib import Path
 
 import pytest
@@ -93,21 +92,7 @@ def test_a_mask_cannot_put_a_stripped_parameter_back_or_change_doctrine():
         apply_mask(load_brain(), load_mask("librarian"), job="hold_gate")
 
 
-@pytest.fixture(scope="session")
-def mask_guard() -> Path:
-    manifest = ROOT / "rust_wrappers" / "Cargo.toml"
-    subprocess.check_call(
-        ["cargo", "test", "--manifest-path", str(manifest), "--offline", "--quiet"],
-    )
-    subprocess.check_call(
-        ["cargo", "build", "--manifest-path", str(manifest), "--offline", "--quiet"],
-    )
-    binary = ROOT / "rust_wrappers" / "target" / "debug" / "mask_guard"
-    assert binary.is_file()
-    return binary
-
-
-def test_wrapper_accepts_a_real_mask_and_reroutes_a_sideways_one(tmp_path, mask_guard):
+def test_wrapper_accepts_every_produced_mask_and_reroutes_sideways(tmp_path, mask_guard):
     masked = apply_mask(load_brain(), load_mask("mayor"), job="hold_thermal_budget")
     dest = tmp_path / "mayor.json"
     commit_mask(masked, dest, mask_guard)
@@ -122,3 +107,35 @@ def test_wrapper_accepts_a_real_mask_and_reroutes_a_sideways_one(tmp_path, mask_
     missing = tmp_path / "missing-binary"
     with pytest.raises(Reroute, match="binary missing"):
         commit_mask(masked, tmp_path / "held.json", missing)
+
+    brain = load_brain()
+    for role in ("mayor", "warrior", "medic", "librarian"):
+        mask = load_mask(role)
+        plain = apply_mask(brain, mask)
+        commit_mask(plain, tmp_path / f"{role}.json", mask_guard)
+        for job in mask["jobs"]:
+            produced = apply_mask(brain, mask, job=job)
+            commit_mask(produced, tmp_path / f"{role}-{job}.json", mask_guard)
+
+    librarian = apply_mask(brain, load_mask("librarian"), job="shelve")
+    librarian["parameters"]["combat"] = {"enabled": True, "doctrine": "defense_only"}
+    with pytest.raises(Reroute, match="stripped"):
+        commit_mask(librarian, tmp_path / "librarian-combat.json", mask_guard)
+
+    loosened = apply_mask(brain, load_mask("mayor"), job="hold_thermal_budget")
+    loosened["parameters"]["resource_allocation"]["thermal_policy"]["selfaware_rx_7900_xtx"][
+        "core_c"
+    ] = 90
+    with pytest.raises(Reroute, match="loosen"):
+        commit_mask(loosened, tmp_path / "loosened.json", mask_guard)
+
+    tightened = apply_mask(brain, load_mask("mayor"), job="hold_thermal_budget")
+    tightened["parameters"]["resource_allocation"]["thermal_policy"]["selfaware_rx_7900_xtx"][
+        "core_c"
+    ] = 75
+    commit_mask(tightened, tmp_path / "tightened.json", mask_guard)
+
+    swarm = apply_mask(brain, load_mask("mayor"))
+    swarm["parameters"]["resource_allocation"]["swarm"] = ["selfaware", "fuzzy66", "throne"]
+    with pytest.raises(Reroute, match="swarm"):
+        commit_mask(swarm, tmp_path / "throne.json", mask_guard)

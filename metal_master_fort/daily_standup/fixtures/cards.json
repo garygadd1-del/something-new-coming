@@ -2,16 +2,16 @@
   {
     "bot": "thermal_gate",
     "lane": "thermal",
-    "goal_hit": "Held the RX 7900 XTX core under the 80C line.",
+    "goal_hit": "EXAMPLE. Watched the planted thermal seed. Ceilings for the RX 9070 and the GTX 1650 are OPEN.",
     "problem_solved": "A lasso caught one core reading before a second strike.",
     "thing_improved": "The baseline post stayed put; collect did not chase the blip."
   },
   {
     "bot": "fuzzy66_thermal",
     "lane": "thermal",
-    "goal_hit": "Stayed on the RX 6600 cheap-pass lane.",
-    "problem_solved": "No cheap-pass ceiling cross.",
-    "thing_improved": "Reported the fort-default ceiling separately from Gary's 7900 XTX line."
+    "goal_hit": "EXAMPLE. The planted cheap-pass seed is still the RX 6600 line. The hardware inventory says RX 7900 GRE plus older cards.",
+    "problem_solved": "No planted cheap-pass ceiling cross in this fixture.",
+    "thing_improved": "Left the GRE ceiling OPEN."
   },
   {
     "bot": "trader_scout",

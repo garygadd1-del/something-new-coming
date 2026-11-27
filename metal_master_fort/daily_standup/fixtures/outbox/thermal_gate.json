@@ -1,0 +1,7 @@
+{
+  "bot": "thermal_gate",
+  "lane": "thermal",
+  "goal_hit": "EXAMPLE. Watched the planted thermal seed. Ceilings for the RX 9070 and the GTX 1650 are OPEN.",
+  "problem_solved": "A lasso caught one core reading before a second strike.",
+  "thing_improved": "The baseline post stayed put; collect did not chase the blip."
+}

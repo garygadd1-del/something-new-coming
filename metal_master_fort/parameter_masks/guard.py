@@ -1,8 +1,8 @@
 """Hand a masked brain to the Rust wrapper.
 
-The wrapper is the immune step. If the JSON is not a masked brain, or the
-binary is missing, this raises Reroute and the caller stops the task.
-A missing binary is a failure, not a skip.
+The wrapper is the immune step. It checks the four masks this package
+produces. If the JSON is sideways, or the binary is missing, this raises
+Reroute and the caller stops the task. A missing binary is a failure, not a skip.
 """
 
 from __future__ import annotations

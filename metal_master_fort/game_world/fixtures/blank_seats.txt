@@ -1,0 +1,5 @@
+# EXAMPLE minutes. The owner has not set a blank-seat budget.
+# A seat line has no name. The last line is refused because it carries one.
+seat blank.001 15
+seat blank.002 15
+seat blank.003 15 Kiln
