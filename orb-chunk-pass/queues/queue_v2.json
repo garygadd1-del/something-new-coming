@@ -1,0 +1,974 @@
+﻿[
+    {
+        "id":  "lf_s07_wide_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_wide_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s07.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_wide_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s101_wide_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_wide_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s101.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_wide_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s11_wide_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_wide_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s11.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_wide_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s23_wide_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_wide_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s23.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_wide_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s42_wide_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_wide_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s42.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_wide_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s77_wide_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_wide_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s77.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_wide_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s07_close_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_close_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s07.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_close_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s101_close_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_close_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s101.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_close_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s11_close_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_close_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s11.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_close_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s23_close_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_close_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s23.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_close_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s42_close_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_close_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s42.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_close_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s77_close_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_close_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s77.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_close_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s07_mid_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_mid_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s07.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_mid_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s101_mid_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_mid_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s101.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_mid_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s11_mid_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_mid_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s11.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_mid_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s23_mid_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_mid_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s23.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_mid_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s42_mid_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_mid_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s42.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_mid_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s77_mid_t0",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_mid_t0",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s77.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=0",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_mid_t0"
+                 ]
+    },
+    {
+        "id":  "lf_s07_wide_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_wide_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s07.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_wide_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s101_wide_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_wide_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s101.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_wide_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s11_wide_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_wide_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s11.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_wide_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s23_wide_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_wide_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s23.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_wide_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s42_wide_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_wide_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s42.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_wide_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s77_wide_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_wide_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s77.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_wide_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s07_close_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_close_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s07.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_close_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s101_close_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_close_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s101.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_close_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s11_close_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_close_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s11.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_close_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s23_close_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_close_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s23.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_close_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s42_close_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_close_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s42.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_close_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s77_close_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_close_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s77.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_close_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s07_mid_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_mid_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s07.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_mid_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s101_mid_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_mid_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s101.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_mid_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s11_mid_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_mid_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s11.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_mid_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s23_mid_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_mid_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s23.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_mid_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s42_mid_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_mid_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s42.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_mid_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s77_mid_t20",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_mid_t20",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s77.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=20",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_mid_t20"
+                 ]
+    },
+    {
+        "id":  "lf_s07_wide_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_wide_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s07.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_wide_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s101_wide_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_wide_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s101.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_wide_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s11_wide_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_wide_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s11.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_wide_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s23_wide_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_wide_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s23.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_wide_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s42_wide_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_wide_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s42.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_wide_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s77_wide_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_wide_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s77.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=0.6",
+                     "--follow=0",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_wide_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s07_close_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_close_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s07.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_close_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s101_close_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_close_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s101.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_close_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s11_close_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_close_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s11.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_close_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s23_close_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_close_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s23.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_close_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s42_close_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_close_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s42.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_close_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s77_close_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_close_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s77.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=1.6",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_close_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s07_mid_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_mid_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s07.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s07_mid_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s101_mid_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_mid_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s101.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s101_mid_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s11_mid_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_mid_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s11.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s11_mid_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s23_mid_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_mid_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s23.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s23_mid_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s42_mid_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_mid_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s42.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s42_mid_t40"
+                 ]
+    },
+    {
+        "id":  "lf_s77_mid_t40",
+        "proj":  "C:\\AGIOS\\Sandbox\\Render_Chunks_20261022\\src\\landfall",
+        "mk":  "C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_mid_t40",
+        "res":  "1280x720",
+        "args":  [
+                     "res://scenes/showcase.tscn",
+                     "--",
+                     "--plan=C:/AGIOS/Sandbox/Render_Chunks_20261022/plans/plan_s77.json",
+                     "--stage=5",
+                     "--seq=240",
+                     "--fps=12",
+                     "--t0=40",
+                     "--zoom=1.0",
+                     "--follow=1",
+                     "--outdir=C:/AGIOS/Sandbox/Render_Chunks_20261022/out/v2/lf_s77_mid_t40"
+                 ]
+    }
+]

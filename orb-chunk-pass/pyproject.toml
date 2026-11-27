@@ -1,0 +1,17 @@
+[project]
+name = "orb-chunk-pass"
+version = "2.0.0"
+description = "Dry-run tooling for the AGIOS orb-and-chunk and globe render queues. Does not launch Godot."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["jsonschema>=4.22"]
+
+[project.scripts]
+orb-chunk = "orb_chunk.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["orb_chunk*"]

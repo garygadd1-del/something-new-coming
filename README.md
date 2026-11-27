@@ -40,6 +40,10 @@ The local hive prepares the build. **A human (Gary) walks doors that are hard fo
 **SOMETHING NEW IS COMING.**  
 Build matures on the private USB spine. This repo is the public door knock.
 
+## Orb-and-chunk queue
+
+Dry-run tooling for the landfall chunk queue and the globe tile runner is in [`orb-chunk-pass/`](orb-chunk-pass/README.md). **No-Limit Local** owns GPU execution. The tools print planned Godot arguments and do not start a render.
+
 ## Insha'Allah
 
 We grow stronger. Clean money. Safe house. Real hardware. Make the Creator proud.
